@@ -2,7 +2,7 @@
 
 <form action="/employee" method="POST" autocomplete="off">
     <input type="hidden" name="_id" value="{{employee._id}}">
-    <div class="form-group">
+    <!--<div class="form-group">
         <label>Full Name</label>
         <input type="text" class="form-control" name="fullName" placeholder="Full Name" value="{{employee.fullName}}">
         <div class="text-danger">
@@ -22,17 +22,26 @@
         <div class="form-group col-md-6">
             <label>City</label>
             <input type="text" class="form-control" name="city" placeholder="City" value="{{employee.city}}">
-        </div>
-        <div class="form-group col-md-6" >
+        </div>-->
+        <div class="form-group" >
 							<select id="selectResident" class="btn btn-info selection-2" name="budget">
                                  {{#each quality}}
 								<option value="proprio">{{this.name}}</option>
                                 {{/each}}
 							</select>
+					
+							<select id="selectResident" class="btn btn-info selection-2" name="budget">
+                                 {{#each quality}}
+								<option value="proprio">{{this.name}}</option>
+                                {{/each}}
+							</select>
+
+                          
 						</div>
-    </div>
+    
     <div class="form-group">
         <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
         <a class="btn btn-secondary" href="/employee/list"><i class="fa fa-list-alt"></i> View All</a>
+    </div>
     </div>
 </form>

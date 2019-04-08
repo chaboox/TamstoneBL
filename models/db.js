@@ -8,3 +8,4 @@ mongoose.connect('mongodb://10.10.10.52:27017/EmployeeDB', { useNewUrlParser: tr
 
 require('./employee.model');
 require('./quality.model');
+require('./finition.model');

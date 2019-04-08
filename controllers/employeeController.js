@@ -3,6 +3,7 @@ var router = express.Router();
 const mongoose = require('mongoose');
 const Employee = mongoose.model('Employee');
 const Quality = mongoose.model('Qualitie');
+const Quality = mongoose.model('Finition');
 
 router.get('/', (req, res) => {
 
@@ -10,7 +11,8 @@ router.get('/', (req, res) => {
     Quality.find((err, docs) => {
         if (!err) {
             res.render("employee/addOrEdit", {
-                viewTitle: docs
+                viewTitle: "Insert Employee",
+                quality: docs
             });
         }
         else {
@@ -27,6 +29,21 @@ router.post('/', (req, res) => {
         insertRecord(req, res);
         else
         updateRecord(req, res);
+});
+
+
+router.get('/BL', (req, res) => {
+    Quality.find((err, docs) => {
+        if (!err) {
+            res.render("employee/Bl", {
+                viewTitle: "Insert Employee",
+                quality: docs
+            });
+        }
+        else {
+            console.log('Error in retrieving employee list :' + err);
+        }
+    });
 });
 
 
