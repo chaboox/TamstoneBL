@@ -63,6 +63,19 @@ router.get('/BL', (req, res) => {
     });
 });
 
+router.get('/home', (req, res) => {
+    Employee.find((err, docs) => {
+        if (!err) {
+            res.render("employee/home", {
+                list: docs
+            });
+        }
+        else {
+            console.log('Error in retrieving employee list :' + err);
+        }
+    });
+});
+
 
 function insertRecord(req, res) {
     var employee = new Employee();

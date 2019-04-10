@@ -62,21 +62,71 @@
                             <input type="text" class="form-control" name="epai" placeholder="Epai" value="{{employee.city}}">
              </div>
 
-           
-                              <select id="selectResident" class="btn btn-info selection-2 form-group" name="budget">
+            <div class="form-group">
+                              <select id="selectResident" class="btn btn-info selection-2" name="budget">
 								<option value="proprio">M2</option>
                                 <option value="proprio">ML</option>
                                 <option value="proprio">U</option>
                                 <option value="proprio">M3</option>
                                 <option value="proprio">TN</option>
 							</select>
-         <button type="submit" class="btn btn-info"> Ajouter une préstation</button>
+         <button type="button"  onClick="hideGroup()" class="btn btn-info"> Ajouter une préstation</button>
                           
 						</div>
+                        </div>
     
     <div class="form-group">
         <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
         <a class="btn btn-secondary" href="/employee/list"><i class="fa fa-list-alt"></i> View All</a>
+    </div> 
+    <table class="table table-striped">
+    <thead>
+        <tr class="table-light">
+            <th>Désignation</th>
+            <th>Qte</th>
+            <th>Long</th>
+            <th>Larg</th>
+            <th>Epai</th>
+            <th>UV</th>
+            <th>Surface</th>
+            <th>PU</th>
+            <th>Total HT</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each list}}
+        <tr>
+            <td>{{this.designation}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.long}}</td>
+            <td>{{this.larg}}</td>
+            <td>{{this.epai}}</td>
+            <td>{{this.uv}}</td>
+            <td>{{this.surface}}</td>
+            <td>{{this.pu}}</td>
+            <td>{{this.total}}</td>
+            <td>
+                <a href="/employee/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                <a href="/employee/delete/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
     </div>
-    </div>
+    
 </form>
+
+
+<script>
+function hide (elements) {
+  elements = elements.length ? elements : [elements];
+  for (var index = 0; index < elements.length; index++) {
+    elements[index].style.display = 'none';
+  }
+}
+
+function hideGroup () {
+    console.log('yo');
+  hide(document.querySelectorAll('.hidy'));
+}
+</script>
