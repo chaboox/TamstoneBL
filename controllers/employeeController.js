@@ -105,23 +105,47 @@ function insertRecord(req, res) {
     });
 }
 
+
+
 function createBl(req, res){
     var bl = new BL();
-    bl.name = "test";
+   
+    bl.name = "YO3"
     bl.save((err, doc) => {
-        if (!err)
-            res.redirect('employee/Bl');
-      /*  else {
-            if (err.name == 'ValidationError') {
-                handleValidationError(err, req.body);
-                res.render("employee/addOrEdit", {
-                    viewTitle: "Insert Employee",
-                    employee: req.body
-                );
+
+    if (!err)
+        Quality.find((err, docs) => {
+            if (!err) {
+                Finition.find((err, docs2) => {
+                    if (!err) {
+                        Type.find((err, docs3) => {
+                            if (!err) {
+                               // console.log('Error in retrieving employee list :' +bl._id);
+                                bl.name = "YO4";
+                                bl.save((err, doc) => {});
+                                res.render("employee/Bl", {
+                                    viewTitle: "Insert Employee",
+                                    quality: docs,
+                                    finition : docs2,
+                                    type : docs3,
+                                    bl:bl
+                                });
+                            }
+                            else {
+                                console.log('Error in retrieving employee list :' + err);
+                            }   
+                        });
+                    }
+                    else {
+                        console.log('Error in retrieving employee list :' + err);
+                    }
+                });
             }
-            else
-                console.log('Error during record insertion : ' + err);
-            }*/
+            else {
+                console.log('Error in retrieving employee list :' + err);
+            }
+        });
+
             else
             console.log('Error during record insertion : ' + err);
     });
@@ -144,6 +168,29 @@ function updateRecord(req, res) {
     });
 }
 
+
+function AddProduct(req, res){
+    var employee = new Employee();
+    employee.fullName = req.body.fullName;
+    employee.email = req.body.email;
+    employee.mobile = req.body.mobile;
+    employee.city = [{name:req.body.city, code:"dd"},{name:req.body.city, code:"aa"}] ;
+    employee.save((err, doc) => {
+        if (!err)
+            res.redirect('employee/list');
+        else {
+            if (err.name == 'ValidationError') {
+                handleValidationError(err, req.body);
+                res.render("employee/addOrEdit", {
+                    viewTitle: "Insert Employee",
+                    employee: req.body
+                });
+            }
+            else
+                console.log('Error during record insertion : ' + err);
+        }
+    });
+}
 
 router.get('/list', (req, res) => {
     Employee.find((err, docs) => {
