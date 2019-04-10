@@ -10,3 +10,4 @@ require('./employee.model');
 require('./quality.model');
 require('./finition.model');
 require('./type.model');
+require('./Bl.model');

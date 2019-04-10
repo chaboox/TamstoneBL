@@ -5,6 +5,7 @@ const Employee = mongoose.model('Employee');
 const Quality = mongoose.model('Qualitie');
 const Finition = mongoose.model('Finition');
 const Type = mongoose.model('Type');
+const BL = mongoose.model('Bl');
 
 router.get('/', (req, res) => {
 
@@ -26,6 +27,10 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+    if(req.body.bl_id != ''){
+        createBl(req, res);
+    }
+    else
     if (req.body._id == '')
         insertRecord(req, res);
         else
@@ -97,6 +102,28 @@ function insertRecord(req, res) {
             else
                 console.log('Error during record insertion : ' + err);
         }
+    });
+}
+
+function createBl(req, res){
+    var bl = new BL();
+    bl.name = "test";
+    bl.save((err, doc) => {
+        if (!err)
+            res.redirect('employee/Bl');
+      /*  else {
+            if (err.name == 'ValidationError') {
+                handleValidationError(err, req.body);
+                res.render("employee/addOrEdit", {
+                    viewTitle: "Insert Employee",
+                    employee: req.body
+                );
+            }
+            else
+                console.log('Error during record insertion : ' + err);
+            }*/
+            else
+            console.log('Error during record insertion : ' + err);
     });
 }
 
