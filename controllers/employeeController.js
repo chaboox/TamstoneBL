@@ -27,11 +27,17 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    if(req.body.bl_id != ''){
+    console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
+    if(req.body.product != '' && req.body.product != undefined)
+        AddProduct(req, res);
+    else
+    if(req.body.bl_id != ''  && req.body.bl_id != undefined){
+        console.log('Yayo 2!: ');
         createBl(req, res);
     }
     else
-    if (req.body._id == '')
+    
+    if (req.body._id == ''  && req.body._id != undefined)
         insertRecord(req, res);
         else
         updateRecord(req, res);
@@ -109,42 +115,12 @@ function insertRecord(req, res) {
 
 function createBl(req, res){
     var bl = new BL();
-   
-    bl.name = "YO3"
+    bl.name = "test";
     bl.save((err, doc) => {
 
     if (!err)
-        Quality.find((err, docs) => {
-            if (!err) {
-                Finition.find((err, docs2) => {
-                    if (!err) {
-                        Type.find((err, docs3) => {
-                            if (!err) {
-                               // console.log('Error in retrieving employee list :' +bl._id);
-                                bl.name = "YO4";
-                                bl.save((err, doc) => {});
-                                res.render("employee/Bl", {
-                                    viewTitle: "Insert Employee",
-                                    quality: docs,
-                                    finition : docs2,
-                                    type : docs3,
-                                    bl:bl
-                                });
-                            }
-                            else {
-                                console.log('Error in retrieving employee list :' + err);
-                            }   
-                        });
-                    }
-                    else {
-                        console.log('Error in retrieving employee list :' + err);
-                    }
-                });
-            }
-            else {
-                console.log('Error in retrieving employee list :' + err);
-            }
-        });
+    goToBlWithAllData(bl, res);
+      
 
             else
             console.log('Error during record insertion : ' + err);
@@ -170,26 +146,20 @@ function updateRecord(req, res) {
 
 
 function AddProduct(req, res){
-    var employee = new Employee();
-    employee.fullName = req.body.fullName;
-    employee.email = req.body.email;
-    employee.mobile = req.body.mobile;
-    employee.city = [{name:req.body.city, code:"dd"},{name:req.body.city, code:"aa"}] ;
-    employee.save((err, doc) => {
+    console.log('Yaya !: ' + req.body.product);
+    BL.findById(req.body.product, (err, doc) => {
+        console.log('Hey !: ' + doc);
+      // doc.products = [{name:"req.body.city", code:"dd"},{name:"req.body.city", code:"aa"}] ;
+       doc.products.push({name:req.body.quality + ' ' + req.body.finition + ' ' + req.body.type, quantity:req.body.qte, long : req.body.long, larg : req.body.larg, epai : req.body.epai, uv: req.body.uv})
+       console.log('TABLE  : ' + doc.products);
+       doc.save((err, doc2) => {
         if (!err)
-            res.redirect('employee/list');
-        else {
-            if (err.name == 'ValidationError') {
-                handleValidationError(err, req.body);
-                res.render("employee/addOrEdit", {
-                    viewTitle: "Insert Employee",
-                    employee: req.body
-                });
-            }
+       goToBlWithAllData(doc, res);
+     
             else
                 console.log('Error during record insertion : ' + err);
-        }
-    });
+        });
+});
 }
 
 router.get('/list', (req, res) => {
@@ -219,6 +189,37 @@ function handleValidationError(err, body) {
                 break;
         }
     }
+}
+
+function goToBlWithAllData(bl, res){
+    Quality.find((err, docs) => {
+        if (!err) {
+            Finition.find((err, docs2) => {
+                if (!err) {
+                    Type.find((err, docs3) => {
+                        if (!err) {
+                            res.render("employee/Bl", {
+                                viewTitle: "Insert Employee",
+                                quality: docs,
+                                finition : docs2,
+                                type : docs3,
+                                bl:bl
+                            });
+                        }
+                        else {
+                            console.log('Error in retrieving employee list :' + err);
+                        }
+                    });
+                }
+                else {
+                    console.log('Error in retrieving employee list :' + err);
+                }
+            });
+        }
+        else {
+            console.log('Error in retrieving employee list :' + err);
+        }
+    });
 }
 
 router.get('/:id', (req, res) => {

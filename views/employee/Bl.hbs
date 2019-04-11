@@ -1,7 +1,7 @@
  <h3>{{bl.name}}</h3>
 
 <form action="/employee" method="POST" autocomplete="off">
-    <input type="hidden" name="_id" value="{{employee._id}}">
+    <input type="hidden" name="product" value="{{bl._id}}">
     <!--<div class="form-group">
         <label>Full Name</label>
         <input type="text" class="form-control" name="fullName" placeholder="Full Name" value="{{employee.fullName}}">
@@ -25,21 +25,21 @@
         </div>-->
        <div class="form-row">
              <div class="form-group">
-							<select id="selectResident" class="btn btn-info selection-2" name="budget">
+							<select id="selectResident" class="btn btn-info selection-2" name="quality">
                                  {{#each quality}}
-								<option value="proprio">{{this.name}}</option>
+								<option value={{this.name}}>{{this.name}}</option>
                                 {{/each}}
 							</select>
 					
-							<select id="selectResident" class="btn btn-info selection-2" name="budget">
+							<select id="selectResident" class="btn btn-info selection-2" name="finition">
                                  {{#each finition}}
-								<option value="proprio">{{this.name}}</option>
+								<option value={{this.name}}>{{this.name}}</option>
                                 {{/each}}
 							</select>
 
-                            <select id="selectResident" class="btn btn-info selection-2" name="budget">
+                            <select id="selectResident" class="btn btn-info selection-2" name="type">
                                  {{#each type}}
-								<option value="proprio">{{this.name}}</option>
+								<option value={{this.name}}>{{this.name}}</option>
                                 {{/each}}
 							</select>
 
@@ -63,12 +63,12 @@
              </div>
 
             <div class="form-group">
-                              <select id="selectResident" class="btn btn-info selection-2" name="budget">
-								<option value="proprio">M2</option>
-                                <option value="proprio">ML</option>
-                                <option value="proprio">U</option>
-                                <option value="proprio">M3</option>
-                                <option value="proprio">TN</option>
+                              <select id="selectResident" class="btn btn-info selection-2" name="uv">
+								<option value="M2">M2</option>
+                                <option value="ML">ML</option>
+                                <option value="U">U</option>
+                                <option value="M3">M3</option>
+                                <option value="TN">TN</option>
 							</select>
          <button type="button"  onClick="hideGroup()" class="btn btn-info"> Ajouter une préstation</button>
                           
@@ -94,9 +94,9 @@
         </tr>
     </thead>
     <tbody>
-        {{#each list}}
+        {{#each bl.products}}
         <tr>
-            <td>{{this.designation}}</td>
+            <td>{{this.name}}</td>
             <td>{{this.quantity}}</td>
             <td>{{this.long}}</td>
             <td>{{this.larg}}</td>
