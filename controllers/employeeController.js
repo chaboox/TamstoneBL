@@ -148,7 +148,7 @@ function updateRecord(req, res) {
 function AddProduct(req, res){
     console.log('Yaya !: ' + req.body.product);
     BL.findById(req.body.product, (err, doc) => {
-        console.log('Hey !: ' + doc);
+        console.log('Hey !: ' + req.body.finition);
       // doc.products = [{name:"req.body.city", code:"dd"},{name:"req.body.city", code:"aa"}] ;
        doc.products.push({name:req.body.quality + ' ' + req.body.finition + ' ' + req.body.type, quantity:req.body.qte, long : req.body.long, larg : req.body.larg, epai : req.body.epai, uv: req.body.uv})
        console.log('TABLE  : ' + doc.products);
@@ -163,6 +163,7 @@ function AddProduct(req, res){
 }
 
 router.get('/list', (req, res) => {
+    console.log('JUST WATCH ME');
     Employee.find((err, docs) => {
         if (!err) {
             res.render("employee/list", {
