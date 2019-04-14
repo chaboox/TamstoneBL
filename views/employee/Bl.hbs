@@ -70,18 +70,39 @@
                                 <option value="M3">M3</option>
                                 <option value="TN">TN</option>
 							</select>
-         <button type="button"  onClick="hideGroup()" class="btn btn-info"> Ajouter une préstation</button>
+        <!--  <button type="button"  onClick="hideGroup()" class="btn btn-info"> Ajouter une préstation</button> -->
          <button type="submit" class="btn btn-info"> Ajouter</button>
                           
 						</div>
+         <div class="form-row">
+              <div class="form-group">
+							<select id="selectResident" class="btn btn-info  disabled selection-2" name="finitionc">
+                                 {{#each finitionc}}
+								<option >{{this.name}}</option>
+                                {{/each}}
+							</select>
+                  
+                              <select id="selectResident" class="btn btn-info disabled selection-2" name="sl">
+                                   <option value="TN">S/ 1 long </option>
+                                    <option value="TN">S/ 1 LARG</option>
+                                     <option value="TN">S/ 2 long </option>
+                                      <option value="TN">S/ 2 LARG</option>
+								<option value="M2">S/ 2 LONG ET S/2LARG</option>
+                                <option value="ML">S/ 1 LONG ET S/2LARG</option>
+                                <option value="U">S/ 2 LONG ET S/1LARG</option>
+                                <option value="M3">S/ 1 LONG ET S/1LARG</option>
+                               
+							</select>
 
+                            <button type="submit" class="btn btn-info disabled"> Ajouter</button>
+             </div>
                          
                         </div>
     
    <!-- <div class="form-group">
         <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
         <a class="btn btn-secondary" href="/employee/list"><i class="fa fa-list-alt"></i> View All</a>
-    </div> -->
+    </div>  -->
     <table class="table table-striped">
     <thead>
         <tr class="table-light">

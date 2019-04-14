@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Employee = mongoose.model('Employee');
 const Quality = mongoose.model('Qualitie');
 const Finition = mongoose.model('Finition');
+const Finitionc = mongoose.model('Finitionc');
 const Type = mongoose.model('Type');
 const BL = mongoose.model('Bl');
 
@@ -42,7 +43,6 @@ router.post('/', (req, res) => {
         else
         updateRecord(req, res);
 });
-
 
 router.get('/BL', (req, res) => {
     Quality.find((err, docs) => {
@@ -87,7 +87,6 @@ router.get('/home', (req, res) => {
     });
 });
 
-
 function insertRecord(req, res) {
     var employee = new Employee();
     employee.fullName = req.body.fullName;
@@ -110,8 +109,6 @@ function insertRecord(req, res) {
         }
     });
 }
-
-
 
 function createBl(req, res){
     var bl = new BL();
@@ -199,12 +196,21 @@ function goToBlWithAllData(bl, res){
                 if (!err) {
                     Type.find((err, docs3) => {
                         if (!err) {
-                            res.render("employee/Bl", {
-                                viewTitle: "Insert Employee",
-                                quality: docs,
-                                finition : docs2,
-                                type : docs3,
-                                bl:bl
+                            Finitionc.find((err, docs4) => {
+                                if (!err) {
+                                    console.log('JOJO ' + docs4);
+                                    res.render("employee/Bl", {
+                                        viewTitle: "Insert Employee",
+                                        quality: docs,
+                                        finition : docs2,
+                                        type : docs3,
+                                        bl:bl,
+                                        finitionc: docs4
+                                    });
+                                }
+                                else {
+                                    console.log('Error in retrieving employee list :' + err);
+                                }
                             });
                         }
                         else {
