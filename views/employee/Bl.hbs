@@ -72,7 +72,8 @@
 							</select>
         <!--  <button type="button"  onClick="hideGroup()" class="btn btn-info"> Ajouter une préstation</button> -->
          <button type="submit" class="btn btn-info"> Ajouter</button>
-                          
+            </form>        
+            <form action="/employee/yo" method="POST" autocomplete="off">
 						</div>
          <div class="form-row">
               <div class="form-group">
@@ -97,7 +98,7 @@
                             <button type="submit" class="btn btn-info disabled"> Ajouter</button>
              </div>
                          
-                        </div>
+                        </div></form>
     
    <!-- <div class="form-group">
         <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
@@ -107,7 +108,7 @@
     <thead>
         <tr class="table-light">
             <th>Désignation</th>
-            <th>Qte</th>
+            <th>{{idpr}}</th>
             <th>Long</th>
             <th>Larg</th>
             <th>Epai</th>
@@ -130,7 +131,7 @@
             <td>{{this.pu}}</td>
             <td>{{this.total}}</td>
             <td>
-                <a href="/employee/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                <a href="/employee/addprestation/{{this.idbl}}+{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
                 <a href="/employee/delete/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
             </td>
         </tr>
@@ -138,7 +139,7 @@
     </tbody>
     </div>
     
-</form>
+
 
 
 <script>

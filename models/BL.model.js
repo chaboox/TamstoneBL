@@ -22,7 +22,8 @@ var BLSchema = new mongoose.Schema({
             uv:String,
             surface:String,
             pu:String,
-            prix:String}]
+            prix:String,
+            idbl:String}]
     },
     client: {
         type: String
