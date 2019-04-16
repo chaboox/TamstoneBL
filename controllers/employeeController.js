@@ -44,6 +44,11 @@ router.post('/', (req, res) => {
         updateRecord(req, res);
 });
 
+router.post('/yo', (req, res) => {
+    console.log('YOJA!: ');
+    AddPrestation(req, res);
+});
+
 router.get('/BL', (req, res) => {
     Quality.find((err, docs) => {
         if (!err) {
@@ -145,8 +150,8 @@ function updateRecord(req, res) {
 function AddProduct(req, res){
     console.log('Yaya !: ' + req.body.product);
     BL.findById(req.body.product, (err, doc) => {
-        console.log('Hey !: ' + req.body.finition);
-      // doc.products = [{name:"req.body.city", code:"dd"},{name:"req.body.city", code:"aa"}] ;
+       console.log('Hey !: ' + req.body.finition);
+       // doc.products = [{name:"req.body.city", code:"dd"},{name:"req.body.city", code:"aa"}] ;
        doc.products.push({name:req.body.quality + ' ' + req.body.finition + ' ' + req.body.type, quantity:req.body.qte, long : req.body.long, larg : req.body.larg, epai : req.body.epai, uv: req.body.uv, idbl: doc._id})
        console.log('TABLE  : ' + doc.products);
        doc.save((err, doc2) => {
@@ -157,6 +162,38 @@ function AddProduct(req, res){
                 console.log('Error during record insertion : ' + err);
         });
 });
+
+
+
+}
+
+function AddPrestation(req, res){
+    console.log('XANA' + req.body.idpr + ' TT ' + req.body.idbl);
+
+    BL.findById(req.body.idbl, (err, doc) => {
+        
+      // doc.products = [{name:"req.body.city", code:"dd"},{name:"req.body.city", code:"aa"}] ;
+      for (i = 0; i < doc.products.length; i++){
+        console.log('XAN!' + doc.products[i] + ' pp ' +  req.body.idpr);  
+          if(req.body.idpr == doc.products[i]._id){
+            console.log('XANAWA');
+            doc.products[i].prestation.push({name: req.body.finitionc, surface:req.body.sl})
+          }
+      }
+     
+      console.log('XANA' + doc.products);
+       //doc.products.push({name:req.body.quality + ' ' + req.body.finition + ' ' + req.body.type, quantity:req.body.qte, long : req.body.long, larg : req.body.larg, epai : req.body.epai, uv: req.body.uv, idbl: doc._id})
+      // console.log('TABLE  : ' + doc.products);
+      doc.save((err, doc2) => {
+       if (!err)
+       goToBlWithAllData(doc, res);
+     //  goToBlWithAllData(doc, res);
+     
+            else
+               console.log('Error during record insertion : ' + err);
+        });
+});
+
 }
 
 router.get('/list', (req, res) => {
@@ -205,7 +242,8 @@ function goToBlWithAllData(bl, res){
                                         finition : docs2,
                                         type : docs3,
                                         bl:bl,
-                                        finitionc: docs4
+                                        finitionc: docs4,
+                                        presbool:false
                                     });
                                 }
                                 else {
@@ -246,7 +284,8 @@ function goToBlWithAllDataAndId(bl, res, id){
                                         type : docs3,
                                         bl:bl,
                                         finitionc: docs4,
-                                        idpr: id
+                                        idpr: id,
+                                        presbool:true
                                     });
                                 }
                                 else {
@@ -284,6 +323,32 @@ router.get('/delete/:id', (req, res) => {
     Employee.findByIdAndRemove(req.params.id, (err, doc) => {
         if (!err) {
             res.redirect('/employee/list');
+        }
+        else { console.log('Error in employee delete :' + err); }
+    });
+});
+
+router.get('/deletepro/:id', (req, res) => {
+    var newArray = [];
+    var idBL =  req.params.id.substring(0, 24);
+    var idPR = req.params.id.substring(25);
+    BL.findById(idBL, (err, doc) => {
+        if (!err) {
+           // res.redirect('/employee/list');
+           for (var i = 0; i < doc.products.length; i++)
+    if ( doc.products[i]._id == idPR) { 
+        doc.products.splice(i, 1);
+        break;
+    }
+    doc.save((err, doc) => {
+
+        if (!err)
+        goToBlWithAllData(doc, res);
+          
+    
+                else
+                console.log('Error during record insertion : ' + err);
+        });
         }
         else { console.log('Error in employee delete :' + err); }
     });

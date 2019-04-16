@@ -46,20 +46,20 @@
              </div>
                             <div class="col-md-1">
                                 
-                            <input type="text" class="form-control" name="qte" placeholder="Quantité" value="{{employee.city}}">
+                            <input type="text" class="form-control" name="qte" placeholder="Quantité">
              </div>
              <div class="col-md-1">
                                 
-                            <input type="text" class="form-control" name="larg" placeholder="Larg" value="{{employee.city}}">
+                            <input type="text" class="form-control" name="larg" placeholder="Larg">
              </div>
                <div class="col-md-1">
                                 
-                            <input type="text" class="form-control" name="long" placeholder="Long" value="{{employee.city}}">
+                            <input type="text" class="form-control" name="long" placeholder="Long">
              </div>
 
               <div class="col-md-1">
                                 
-                            <input type="text" class="form-control" name="epai" placeholder="Epai" value="{{employee.city}}">
+                            <input type="text" class="form-control" name="epai" placeholder="Epai">
              </div>
 
             <div class="form-group">
@@ -72,30 +72,57 @@
 							</select>
         <!--  <button type="button"  onClick="hideGroup()" class="btn btn-info"> Ajouter une préstation</button> -->
          <button type="submit" class="btn btn-info"> Ajouter</button>
+         	</div>
             </form>        
             <form action="/employee/yo" method="POST" autocomplete="off">
-						</div>
+               <input type="hidden" name="idpr" value="{{idpr}}">
+               <input type="hidden" name="idbl" value="{{bl._id}}">
+					
          <div class="form-row">
               <div class="form-group">
-							<select id="selectResident" class="btn btn-info  disabled selection-2" name="finitionc">
+                  {{#if presbool}}
+							<select id="selectResident" class="btn btn-info  selection-2" name="finitionc">
                                  {{#each finitionc}}
 								<option >{{this.name}}</option>
                                 {{/each}}
 							</select>
                   
-                              <select id="selectResident" class="btn btn-info disabled selection-2" name="sl">
-                                   <option value="TN">S/ 1 long </option>
-                                    <option value="TN">S/ 1 LARG</option>
-                                     <option value="TN">S/ 2 long </option>
-                                      <option value="TN">S/ 2 LARG</option>
-								<option value="M2">S/ 2 LONG ET S/2LARG</option>
-                                <option value="ML">S/ 1 LONG ET S/2LARG</option>
-                                <option value="U">S/ 2 LONG ET S/1LARG</option>
-                                <option value="M3">S/ 1 LONG ET S/1LARG</option>
+                              <select id="selectResident" class="btn btn-info selection-2" name="sl">
+                                   <option >S/ 1 long </option>
+                                    <option >S/ 1 LARG</option>
+                                     <option >S/ 2 long </option>
+                                      <option >S/ 2 LARG</option>
+								<option >S/ 2 LONG ET S/2LARG</option>
+                                <option>S/ 1 LONG ET S/2LARG</option>
+                                <option >S/ 2 LONG ET S/1LARG</option>
+                                <option >S/ 1 LONG ET S/1LARG</option>
                                
 							</select>
 
-                            <button type="submit" class="btn btn-info disabled"> Ajouter</button>
+                            <button type="submit" class="btn btn-info"> Ajouter</button>
+
+                            {{else}}
+
+                            	<select disabled id="selectResident" class="btn btn-info  disabled selection-2" name="finitionc">
+                                 {{#each finitionc}}
+								<option >{{this.name}}</option>
+                                {{/each}}
+							</select>
+                  
+                              <select disabled id="selectResident" class="btn btn-info disabled selection-2" name="sl">
+                                   <option >S/ 1 long </option>
+                                    <option >S/ 1 LARG</option>
+                                     <option >S/ 2 long </option>
+                                      <option >S/ 2 LARG</option>
+								<option >S/ 2 LONG ET S/2LARG</option>
+                                <option>S/ 1 LONG ET S/2LARG</option>
+                                <option >S/ 2 LONG ET S/1LARG</option>
+                                <option >S/ 1 LONG ET S/1LARG</option>
+                               
+							</select>
+
+                            <button disabled type="submit" class="btn btn-info disabled"> Ajouter</button>
+                    {{/if}}
              </div>
                          
                         </div></form>
@@ -108,7 +135,7 @@
     <thead>
         <tr class="table-light">
             <th>Désignation</th>
-            <th>{{idpr}}</th>
+            <th>Qte</th>
             <th>Long</th>
             <th>Larg</th>
             <th>Epai</th>
@@ -121,7 +148,7 @@
     <tbody>
         {{#each bl.products}}
         <tr>
-            <td>{{this.name}}</td>
+            <td>{{this.name}}   {{#each this.prestation}} {{this.name}} {{this.surface}} {{/each}}</td>
             <td>{{this.quantity}}</td>
             <td>{{this.long}}</td>
             <td>{{this.larg}}</td>
@@ -132,7 +159,7 @@
             <td>{{this.total}}</td>
             <td>
                 <a href="/employee/addprestation/{{this.idbl}}+{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
-                <a href="/employee/delete/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+                <a href="/employee/deletepro/{{this.idbl}}+{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
             </td>
         </tr>
         {{/each}}
