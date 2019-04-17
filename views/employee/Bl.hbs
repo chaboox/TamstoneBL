@@ -1,4 +1,4 @@
- <h3>{{bl.name}}</h3>
+ <h3>{{bl.testFunc 2}}</h3>
 
 <form action="/employee" method="POST" autocomplete="off">
     <input type="hidden" name="product" value="{{bl._id}}">
@@ -71,8 +71,14 @@
                                 <option value="TN">TN</option>
 							</select>
         <!--  <button type="button"  onClick="hideGroup()" class="btn btn-info"> Ajouter une préstation</button> -->
+          </div>
+          <div class="col-md-1">
+                                
+                            <input type="text" class="form-control" name="pu" placeholder="Prix unitaire">
+             </div>
+              <div class="form-group">
          <button type="submit" class="btn btn-info"> Ajouter</button>
-         	</div>
+         	  </div> 
             </form>        
             <form action="/employee/yo" method="POST" autocomplete="off">
                <input type="hidden" name="idpr" value="{{idpr}}">
@@ -150,13 +156,13 @@
         <tr>
             <td>{{this.name}}   {{#each this.prestation}} {{this.name}} {{this.surface}} {{/each}}</td>
             <td>{{this.quantity}}</td>
-            <td>{{this.long}}</td>
-            <td>{{this.larg}}</td>
-            <td>{{this.epai}}</td>
+            <td>{{this.longs}}</td>
+            <td>{{this.largs}}</td>
+            <td>{{this.epais}}</td>
             <td>{{this.uv}}</td>
-            <td>{{this.surface}}</td>
-            <td>{{this.pu}}</td>
-            <td>{{this.total}}</td>
+            <td>{{this.surfaces}}</td>
+            <td>{{this.pus}}</td>
+            <td>{{this.prixs}}</td>
             <td>
                 <a href="/employee/addprestation/{{this.idbl}}+{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
                 <a href="/employee/deletepro/{{this.idbl}}+{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>

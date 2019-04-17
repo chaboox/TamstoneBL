@@ -29,7 +29,13 @@ var BLSchema = new mongoose.Schema({
                     name:String,
                     surface:String
                 }]
-            }    
+            }   ,
+            longs:String,
+            largs:String,
+            epais:String,
+            surfaces:String,
+            pus:String,
+            prixs:String, 
         }]
     },
     client: {
@@ -37,6 +43,10 @@ var BLSchema = new mongoose.Schema({
     }
 });
 
+BLSchema.methods.testFunc = function testFunc(number) {
+    return number + 1;
+  }
+  
 
 mongoose.model('Bl', BLSchema);
 

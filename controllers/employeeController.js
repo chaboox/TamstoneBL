@@ -151,8 +151,19 @@ function AddProduct(req, res){
     console.log('Yaya !: ' + req.body.product);
     BL.findById(req.body.product, (err, doc) => {
        console.log('Hey !: ' + req.body.finition);
+       //TODO Calcul price
+
+       var surface = calculSurfaceByType(req.body.uv, 1000*req.body.qte, 1000*req.body.long, 1000*req.body.larg, 1000*req.body.epai)
+       var epais = numberWithCommas(req.body.epai);
+       var largs = numberWithCommas(req.body.larg);
+       var longs = numberWithCommas(req.body.long);
+       var pus = numberWithCommas(req.body.pu);
+       var prixs = numberWithCommas((surface * req.body.pu) + '');
+       var surfaces = numberWithCommas(surface + '');
+       console.log('Hey !: ' + surfaces + ' LOLO ' + surface);
+      // surface = Math.floor(( surface )*10000)/10000;
        // doc.products = [{name:"req.body.city", code:"dd"},{name:"req.body.city", code:"aa"}] ;
-       doc.products.push({name:req.body.quality + ' ' + req.body.finition + ' ' + req.body.type, quantity:req.body.qte, long : req.body.long, larg : req.body.larg, epai : req.body.epai, uv: req.body.uv, idbl: doc._id})
+       doc.products.push({name:req.body.quality + ' ' + req.body.finition + ' ' + req.body.type, quantity:req.body.qte, long : req.body.long,  longs : longs, larg : req.body.larg, largs : largs, epai : req.body.epai, epais : epais, uv: req.body.uv, idbl: doc._id, pu : req.body.pu, pus: pus, surface: surface, surfaces: surfaces, prixs: prixs, prix: surface * req.body.pu})
        console.log('TABLE  : ' + doc.products);
        doc.save((err, doc2) => {
         if (!err)
@@ -165,6 +176,16 @@ function AddProduct(req, res){
 
 
 
+}
+
+function calculSurfaceByType(type, qte, long, larg, epai){
+    console.log('XANLEA' + type);
+    if(type == "M2") return (qte * long * larg)/1000000000;
+    else if(type == "ML") return (qte * long)/1000000;
+    else if(type == "U") return qte/1000;
+    else if(type == "M3") return (qte * long * larg * epai)/1000000000000;
+    else if(type == "TN") return (qte * long * larg * epai * 28)/10000000000000;
+    else return 0;
 }
 
 function AddPrestation(req, res){
@@ -224,6 +245,32 @@ function handleValidationError(err, body) {
                 break;
         }
     }
+}
+
+function numberWithCommas(x) {
+    var left = '';
+    var right = '';
+    var leftBool = true;
+    for (var i = 0; i < x.length; i++){
+        if(x[i] == '.'){
+        leftBool = false;
+        i++;
+        }
+        if(leftBool)
+            left = left + x[i];
+            else
+            right = right + x[i];
+    }
+
+    if (right.length == 0)
+        right = '00';
+    else if( right.length == 1)
+        right = right + '0';
+    
+    left = left.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    console.log('JOJOJO' + x[1] + x.length); 
+    //TODO ADAPTE NUMBER
+    return left + '.' + right ;
 }
 
 function goToBlWithAllData(bl, res){
@@ -333,7 +380,7 @@ router.get('/deletepro/:id', (req, res) => {
     var idBL =  req.params.id.substring(0, 24);
     var idPR = req.params.id.substring(25);
     BL.findById(idBL, (err, doc) => {
-        if (!err) {
+        if (!err) { 
            // res.redirect('/employee/list');
            for (var i = 0; i < doc.products.length; i++)
     if ( doc.products[i]._id == idPR) { 
@@ -343,9 +390,7 @@ router.get('/deletepro/:id', (req, res) => {
     doc.save((err, doc) => {
 
         if (!err)
-        goToBlWithAllData(doc, res);
-          
-    
+        goToBlWithAllData(doc, res);    
                 else
                 console.log('Error during record insertion : ' + err);
         });
