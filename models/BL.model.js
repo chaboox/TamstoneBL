@@ -27,7 +27,8 @@ var BLSchema = new mongoose.Schema({
             prestation:{
                 type:[{
                     name:String,
-                    surface:String
+                    surface:String,
+                    pu:String
                 }]
             }   ,
             longs:String,

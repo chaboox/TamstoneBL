@@ -198,7 +198,7 @@ function AddPrestation(req, res){
         console.log('XAN!' + doc.products[i] + ' pp ' +  req.body.idpr);  
           if(req.body.idpr == doc.products[i]._id){
             console.log('XANAWA');
-            doc.products[i].prestation.push({name: req.body.finitionc, surface:req.body.sl})
+            doc.products[i].prestation.push({name: req.body.finitionc, surface:req.body.sl, pu: req.body.pup })
           }
       }
      
@@ -283,6 +283,7 @@ function goToBlWithAllData(bl, res){
                             Finitionc.find((err, docs4) => {
                                 if (!err) {
                                     console.log('JOJO' + docs4);
+                                    var prestations = getPrestation(bl.products);
                                     res.render("employee/Bl", {
                                         viewTitle: "Insert Employee",
                                         quality: docs,
@@ -324,6 +325,7 @@ function goToBlWithAllDataAndId(bl, res, id){
                             Finitionc.find((err, docs4) => {
                                 if (!err) {
                                     console.log('JOJO' + docs4);
+                                    var prestations = getPrestation(bl.products);
                                     res.render("employee/Bl", {
                                         viewTitle: "Insert Employee",
                                         quality: docs,
@@ -355,6 +357,27 @@ function goToBlWithAllDataAndId(bl, res, id){
         }
     });
 }
+
+function getPrestation(products){
+    var result = [];
+    console.log('OIOI' + products[0]);
+   // if(bl != undefined)
+   //if(bl.products != undefined)
+   for (var i = 0; i < products.length; i++){
+        console.log('OIOI2' + products[i]);
+        for (var j = 0; j < products[i].prestation.length; j++){
+            console.log('OIOI2' + products[i].prestation[j]);
+            result.push(products[i].prestation[j])
+        }
+   }
+       // for(prestation in products){
+        // result.push(prestation);   
+        //}
+    
+    console.log('PRORO' + result);
+    return result;
+}
+
 router.get('/:id', (req, res) => {
     Employee.findById(req.params.id, (err, doc) => {
         if (!err) {
