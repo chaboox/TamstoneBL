@@ -198,7 +198,8 @@ function AddPrestation(req, res){
         console.log('XAN!' + doc.products[i] + ' pp ' +  req.body.idpr);  
           if(req.body.idpr == doc.products[i]._id){
             console.log('XANAWA');
-            doc.products[i].prestation.push({name: req.body.finitionc, surface:req.body.sl, pu: req.body.pup })
+            var surcafepr = calculeSurcace(doc.products[i], req.body.sl, req.body.pup);
+            doc.products[i].prestation.push({name: req.body.finitionc, surface:req.body.sl, pu: req.body.pup, prix:surcafepr * req.body.pup, surfacer: surcafepr})
           }
       }
      
@@ -215,6 +216,45 @@ function AddPrestation(req, res){
         });
 });
 
+}
+
+function calculeSurcace(product, sl, pu){
+    switch(sl) {
+        case 'S/1 LONG':
+            return product.long * product.quantity;
+        break;
+        case 'S/1 LARG':
+              return product.larg * product.quantity;
+        break;
+        
+        case 'S/2 LONG':
+          return product.long * product.quantity *2;
+        break;
+
+        case 'S/2 LARG':
+            return product.larg * product.quantity *2;
+        break;
+
+        case 'S/2 LONG ET S/2LARG':
+            return product.long * product.quantity *2 + product.larg * product.quantity *2;
+        break;
+
+        case 'S/1 LONG ET S/2LARG':
+            return product.long * product.quantity  + product.larg * product.quantity *2;
+        break;
+
+        case 'S/2 LONG ET S/1LARG':
+            return product.long * product.quantity *2 + product.larg * product.quantity;
+        break;
+
+        case 'S/1 LONG ET S/1LARG':
+            return product.long * product.quantity + product.larg * product.quantity;
+        break;
+
+        default:
+          return -1;
+        break;
+      }
 }
 
 router.get('/list', (req, res) => {
@@ -282,7 +322,7 @@ function goToBlWithAllData(bl, res){
                         if (!err) {
                             Finitionc.find((err, docs4) => {
                                 if (!err) {
-                                    console.log('JOJO' + docs4);
+                                    //console.log('JOJO' + docs4);
                                     var prestations = getPrestation(bl.products);
                                     res.render("employee/Bl", {
                                         viewTitle: "Insert Employee",
@@ -291,7 +331,8 @@ function goToBlWithAllData(bl, res){
                                         type : docs3,
                                         bl:bl,
                                         finitionc: docs4,
-                                        presbool:false
+                                        presbool:false,
+                                        prestation: prestations
                                     });
                                 }
                                 else {
@@ -324,7 +365,7 @@ function goToBlWithAllDataAndId(bl, res, id){
                         if (!err) {
                             Finitionc.find((err, docs4) => {
                                 if (!err) {
-                                    console.log('JOJO' + docs4);
+                                    //console.log('JOJO' + docs4);
                                     var prestations = getPrestation(bl.products);
                                     res.render("employee/Bl", {
                                         viewTitle: "Insert Employee",
@@ -334,7 +375,8 @@ function goToBlWithAllDataAndId(bl, res, id){
                                         bl:bl,
                                         finitionc: docs4,
                                         idpr: id,
-                                        presbool:true
+                                        presbool:true,
+                                        prestation: prestations
                                     });
                                 }
                                 else {
@@ -380,7 +422,7 @@ function getPrestation(products){
 
 router.get('/:id', (req, res) => {
     Employee.findById(req.params.id, (err, doc) => {
-        if (!err) {
+        if (!err) { 
             res.render("employee/addOrEdit", {
                 viewTitle: "Update Employee",
                 employee: doc

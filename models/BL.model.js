@@ -28,7 +28,9 @@ var BLSchema = new mongoose.Schema({
                 type:[{
                     name:String,
                     surface:String,
-                    pu:String
+                    pu:String,
+                    prix:String,
+                    surfacer:String
                 }]
             }   ,
             longs:String,

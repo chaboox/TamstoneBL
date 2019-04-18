@@ -94,14 +94,14 @@
 							</select>
                   
                               <select id="selectResident" class="btn btn-info selection-2" name="sl">
-                                   <option >S/ 1 long </option>
-                                    <option >S/ 1 LARG</option>
-                                     <option >S/ 2 long </option>
-                                      <option >S/ 2 LARG</option>
-								<option >S/ 2 LONG ET S/2LARG</option>
-                                <option>S/ 1 LONG ET S/2LARG</option>
-                                <option >S/ 2 LONG ET S/1LARG</option>
-                                <option >S/ 1 LONG ET S/1LARG</option>
+                                   <option >S/1 LONG</option>
+                                    <option >S/1 LARG</option>
+                                     <option >S/2 LONG</option>
+                                      <option >S/2 LARG</option>
+								<option >S/2 LONG ET S/2LARG</option>
+                                <option>S/1 LONG ET S/2LARG</option>
+                                <option >S/2 LONG ET S/1LARG</option>
+                                <option >S/1 LONG ET S/1LARG</option>
                                
 							</select>
                             </div>
@@ -122,14 +122,14 @@
 							</select>
                   
                               <select disabled id="selectResident" class="btn btn-info disabled selection-2" name="sl">
-                                   <option >S/ 1 long </option>
-                                    <option >S/ 1 LARG</option>
-                                     <option >S/ 2 long </option>
-                                      <option >S/ 2 LARG</option>
-								<option >S/ 2 LONG ET S/2LARG</option>
-                                <option>S/ 1 LONG ET S/2LARG</option>
-                                <option >S/ 2 LONG ET S/1LARG</option>
-                                <option >S/ 1 LONG ET S/1LARG</option>
+                                 <option >S/1 LONG</option>
+                                    <option >S/1 LARG</option>
+                                     <option >S/2 LONG</option>
+                                      <option >S/2 LARG</option>
+								<option >S/2 LONG ET S/2LARG</option>
+                                <option>S/1 LONG ET S/2LARG</option>
+                                <option >S/2 LONG ET S/1LARG</option>
+                                <option >S/1 LONG ET S/1LARG</option>
                                
 							</select></div>
                          <div class="col-md-3">
@@ -179,6 +179,24 @@
             </td>
         </tr>
         {{/each}}
+
+        {{#each bl.products}}
+        {{#each this.prestation}}
+         <tr>
+            <td>{{this.name}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{this.surfacer}}</td>
+            <td>{{this.pu}}</td>
+            <td>{{this.prix}}</td>
+          
+        </tr>
+        {{/each}}
+        {{/each}}
+
     </tbody>
     </div>
     
