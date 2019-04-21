@@ -409,7 +409,22 @@ function getPrestation(products){
         console.log('OIOI2' + products[i]);
         for (var j = 0; j < products[i].prestation.length; j++){
             console.log('OIOI2' + products[i].prestation[j]);
-            result.push(products[i].prestation[j])
+            var isInResult = false;
+            for (var k = 0; k < result.length; k++){
+                console.log('JOKO   ' + products[i].prestation[j].name + " ||| "  + result[k].name + " |||| " + result[k].pu + products[i].prestation[j].pu);
+                if(result[k].name == products[i].prestation[j].name && result[k].pu == products[i].prestation[j].pu){
+                    console.log('JOKO!!!!   ' +  result[k].surfacer + " LL " + result[k].pu + "LL " + result[k].prix + isInResult + " KLKLKL " + products[i].prestation[j].surfacer);
+                    console.log('LOLO' + result);
+                    result[k].surfacer = result[k].surfacer*1 + products[i].prestation[j].surfacer*1;
+                   // var opp = result[k].surfacer*1 + products[i].prestation[j].surfacer*1;
+                    result[k].prix = result[k].surfacer * result[k].pu;
+                   // result[k].surfacer = opp;
+                    isInResult = true;
+                    //console.log('JOKO!!!!   ' +  result[k].surfacer + " LL " + result[k].pu + "LL " + result[k].prix + isInResult + "KLOLKLO " + opp);
+                }
+            }
+           if(isInResult == false) 
+                result.push(products[i].prestation[j]);
         }
    }
        // for(prestation in products){
