@@ -7,6 +7,7 @@ const Finition = mongoose.model('Finition');
 const Finitionc = mongoose.model('Finitionc');
 const Type = mongoose.model('Type');
 const BL = mongoose.model('Bl');
+const Client = mongoose.model('Client');
 
 router.get('/', (req, res) => {
 
@@ -199,7 +200,7 @@ function AddPrestation(req, res){
           if(req.body.idpr == doc.products[i]._id){
             console.log('XANAWA');
             var surcafepr = calculeSurcace(doc.products[i], req.body.sl, req.body.pup);
-            doc.products[i].prestation.push({name: req.body.finitionc, surface:req.body.sl, pu: req.body.pup, prix:surcafepr * req.body.pup, surfacer: surcafepr})
+            doc.products[i].prestation.push({name: req.body.finitionc, surface:req.body.sl, pu: req.body.pup, prix:surcafepr * req.body.pup, surfacer: surcafepr, surfacers: numberWithCommas(surcafepr + ''), prixs: numberWithCommas((surcafepr * req.body.pup) + ''), pus: numberWithCommas(req.body.pup)})
           }
       }
      
@@ -259,7 +260,7 @@ function calculeSurcace(product, sl, pu){
 
 router.get('/list', (req, res) => {
     console.log('JUST WATCH ME');
-    Bl.find((err, docs) => {
+    Employee.find((err, docs) => {
         if (!err) {
             res.render("employee/list", {
                 list: docs
@@ -271,6 +272,19 @@ router.get('/list', (req, res) => {
     });
 });
 
+router.get('/clients', (req, res) => {
+    console.log('JUST WATCH ME');
+    Client.find((err, docs) => {
+        if (!err) {
+            res.render("employee/clients", {
+                list: docs
+            });
+        }
+        else {
+            console.log('Error in retrieving employee list :' + err);
+        }
+    });
+});
 
 function handleValidationError(err, body) {
     for (field in err.errors) {
@@ -416,8 +430,10 @@ function getPrestation(products){
                     console.log('JOKO!!!!   ' +  result[k].surfacer + " LL " + result[k].pu + "LL " + result[k].prix + isInResult + " KLKLKL " + products[i].prestation[j].surfacer);
                     console.log('LOLO' + result);
                     result[k].surfacer = result[k].surfacer*1 + products[i].prestation[j].surfacer*1;
+                    result[k].surfacers = numberWithCommas(result[k].surfacer);
                    // var opp = result[k].surfacer*1 + products[i].prestation[j].surfacer*1;
                     result[k].prix = result[k].surfacer * result[k].pu;
+                    result[k].prixs = numberWithCommas(result[k].prix);
                    // result[k].surfacer = opp;
                     isInResult = true;
                     //console.log('JOKO!!!!   ' +  result[k].surfacer + " LL " + result[k].pu + "LL " + result[k].prix + isInResult + "KLOLKLO " + opp);

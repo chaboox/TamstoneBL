@@ -1,0 +1,41 @@
+<h3><a class="btn btn-secondary" href="/employee"><i class="fa fa-plus"></i>Ajouter un Client</a> Listes de clients</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>nom</th>
+            <th>activité</th>
+            <th>compte</th>
+            <th>adresse</th>
+            <th>ad poste</th>
+            <th>ville</th>
+            <th>code cli</th>
+            <th>RC</th>
+            <th>MF</th>
+            <th>AI</th>
+            <th>telephone</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each list}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.activity}}</td>
+            <td>{{this.compte}}</td>
+            <td>{{this.adresse}}</td>
+            <td>{{this.adressepos}}</td>
+            <td>{{this.city}}</td>
+            <td>{{this.code}}</td>
+            <td>{{this.rc}}</td>
+            <td>{{this.mf}}</td>
+            <td>{{this.ai}}</td>
+            <td>{{this.number}}</td>
+
+           
+            <td>
+                <a href="/employee/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                <a href="/employee/delete/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -30,9 +30,14 @@ var BLSchema = new mongoose.Schema({
                     surface:String,
                     pu:String,
                     prix:String,
-                    surfacer:String
+                    surfacer:String,
+                    products:String,
+                    pus:String,
+                    prixs:String,
+                    surfacers:String,
+                    
                 }]
-            }   ,
+            },
             longs:String,
             largs:String,
             epais:String,
@@ -46,10 +51,5 @@ var BLSchema = new mongoose.Schema({
     }
 });
 
-BLSchema.methods.testFunc = function testFunc(number) {
-    return number + 1;
-  }
-  
 
 mongoose.model('Bl', BLSchema);
-

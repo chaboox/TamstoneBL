@@ -12,3 +12,4 @@ require('./finition.model');
 require('./finitionc.model');
 require('./type.model');
 require('./Bl.model');
+require('./client.model');
