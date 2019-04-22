@@ -1,0 +1,84 @@
+<h3>{{viewTitle}}</h3>
+
+<form action="/employee/modifyc" method="POST" autocomplete="off">
+    <input type="hidden" name="_id" value="{{client._id}}">
+   <!-- <div class="form-group">
+        <label>Nom</label>
+        <input type="text" class="form-control" name="nom" placeholder="nom" value="{{client.name}}">
+       
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="text" class="form-control" name="email" placeholder="Email" value="{{employee.email}}">
+      
+    </div> -->
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Nom</label>
+            <input type="text" class="form-control" name="name" placeholder="nom" value="{{client.name}}">
+        </div>
+        <div class="form-group col-md-6">
+            <label>activité</label>
+            <input type="text" class="form-control" name="activity" placeholder="activité" value="{{client.activity}}">
+        </div>
+      
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Compte</label>
+            <input type="text" class="form-control" name="compte" placeholder="compte" value="{{client.compte}}">
+        </div>
+        <div class="form-group col-md-6">
+            <label>adresse</label>
+            <input type="text" class="form-control" name="adresse" placeholder="adresse" value="{{client.adresse}}">
+        </div>
+       
+    </div>
+     <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Adresse postale</label>
+            <input type="text" class="form-control" name="adressepos" placeholder="adresse postale" value="{{client.adressepos}}">
+        </div>
+        <div class="form-group col-md-6">
+            <label>Ville</label>
+            <input type="text" class="form-control" name="city" placeholder="ville" value="{{client.city}}">
+        </div>
+       
+    </div>
+
+     <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Code client</label>
+            <input type="text" class="form-control" name="code" placeholder="code" value="{{client.code}}">
+        </div>
+        <div class="form-group col-md-6">
+            <label>RC</label>
+            <input type="text" class="form-control" name="rc" placeholder="RC" value="{{client.rc}}">
+        </div>
+       
+    </div>
+
+     <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>MF</label>
+            <input type="text" class="form-control" name="mf" placeholder="MF" value="{{client.mf}}">
+        </div>
+        <div class="form-group col-md-6">
+            <label>AI</label>
+            <input type="text" class="form-control" name="ai" placeholder="AI" value="{{client.ai}}">
+        </div>
+       
+    </div>
+
+     <div class="form-group">
+        <label>Telephone</label>
+        <input type="text" class="form-control" name="number" placeholder="telephone" value="{{client.number}}">
+       
+    </div>
+
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
+        <a class="btn btn-secondary" href="/employee/list"><i class="fa fa-list-alt"></i> View All</a>
+    </div>
+</form>

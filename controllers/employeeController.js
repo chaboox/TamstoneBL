@@ -28,6 +28,16 @@ router.get('/', (req, res) => {
   
 });
 
+
+router.get('/addClient', (req, res) => {
+
+    
+
+            res.render("employee/addOrEditClient", {
+                viewTitle: "Ajout client"
+       
+});});
+
 router.post('/', (req, res) => {
     console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
     if(req.body.product != '' && req.body.product != undefined)
@@ -43,6 +53,16 @@ router.post('/', (req, res) => {
         insertRecord(req, res);
         else
         updateRecord(req, res);
+});
+
+router.post('/modifyc', (req, res) => {
+   // console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
+ 
+    
+    if (req.body._id == '')
+        insertClient(req, res);
+        else
+        updateClient(req, res);
 });
 
 router.post('/yo', (req, res) => {
@@ -81,16 +101,8 @@ router.get('/BL', (req, res) => {
 });
 
 router.get('/home', (req, res) => {
-    Employee.find((err, docs) => {
-        if (!err) {
             res.render("employee/home", {
-                list: docs
             });
-        }
-        else {
-            console.log('Error in retrieving employee list :' + err);
-        }
-    });
 });
 
 function insertRecord(req, res) {
@@ -108,6 +120,36 @@ function insertRecord(req, res) {
                 res.render("employee/addOrEdit", {
                     viewTitle: "Insert Employee",
                     employee: req.body
+                });
+            }
+            else
+                console.log('Error during record insertion : ' + err);
+        }
+    });
+}
+
+function insertClient(req, res) {
+    var client = new Client();
+    client.name = req.body.name;
+    client.activity = req.body.activity;
+    client.adresse = req.body.adresse;
+    client.compte = req.body.compte;
+    client.adressepos = req.body.adressepos;
+    client.city = req.body.city;
+    client.code = req.body.code;
+    client.rc = req.body.rc;
+    client.mf = req.body.mf;
+    client.ai = req.body.ai;
+    client.number = req.body.number;
+    client.save((err, doc) => {
+        if (!err)
+            res.redirect('/employee/clients');
+        else {
+            if (err.name == 'ValidationError') {
+                handleValidationError(err, req.body);
+                res.render("/employee/addOrEditClient", {
+                    viewTitle: "Insert Client",
+                    client: req.body
                 });
             }
             else
@@ -147,6 +189,22 @@ function updateRecord(req, res) {
     });
 }
 
+function updateClient(req, res) {
+    Client.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true }, (err, doc) => {
+        if (!err) { res.redirect('/employee/clients'); }
+        else {
+            if (err.name == 'ValidationError') {
+                handleValidationError(err, req.body);
+                res.render("/employee/addOrEditClient", {
+                    viewTitle: 'Update Client',
+                    client: req.body
+                });
+            }
+            else
+                console.log('Error during record update : ' + err);
+        }
+    });
+}
 
 function AddProduct(req, res){
     console.log('Yaya !: ' + req.body.product);
@@ -462,6 +520,26 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.get('/modify/:id', (req, res) => {
+    Client.findById(req.params.id, (err, doc) => {
+        if (!err) { 
+            res.render("employee/addOrEditClient", {
+                viewTitle: "Update client",
+                client: doc
+            });
+        }
+    });
+});
+
+router.get('/deleteclient/:id', (req, res) => {
+    Client.findByIdAndRemove(req.params.id, (err, doc) => {
+        if (!err) {
+            res.redirect('/employee/clients');
+        }
+        else { console.log('Error in employee delete :' + err); }
+    });
+});
+
 router.get('/delete/:id', (req, res) => {
     Employee.findByIdAndRemove(req.params.id, (err, doc) => {
         if (!err) {
@@ -470,6 +548,7 @@ router.get('/delete/:id', (req, res) => {
         else { console.log('Error in employee delete :' + err); }
     });
 });
+
 
 router.get('/deletepro/:id', (req, res) => {
     var newArray = [];
