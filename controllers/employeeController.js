@@ -70,6 +70,21 @@ router.post('/yo', (req, res) => {
     AddPrestation(req, res);
 });
 
+router.post('/filter', (req, res) => {
+    var search = req.body.search;
+    Client.find( { "name": { "$regex": search, "$options": "i" } },(err, docs) => {
+        if (!err) {
+            res.render("employee/selectClient", {
+                list: docs,
+                search: search
+            });
+        }
+        else {
+            console.log('Error in retrieving employee list :' + err);
+        }
+    });
+});
+
 router.get('/BL', (req, res) => {
     Quality.find((err, docs) => {
         if (!err) {
@@ -335,6 +350,21 @@ router.get('/clients', (req, res) => {
     Client.find((err, docs) => {
         if (!err) {
             res.render("employee/clients", {
+                list: docs
+            });
+        }
+        else {
+            console.log('Error in retrieving employee list :' + err);
+        }
+    });
+});
+
+router.get('/selectClient', (req, res) => {
+  
+    console.log('JUST WATCH ME');
+    Client.find((err, docs) => {
+        if (!err) {
+            res.render("employee/selectClient", {
                 list: docs
             });
         }
