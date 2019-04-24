@@ -1,4 +1,4 @@
- <h3>{{1}}</h3>
+ <h3>{{bl.client}}</h3>
 
 <form action="/employee" method="POST" autocomplete="off">
     <input type="hidden" name="product" value="{{bl._id}}">
@@ -159,6 +159,7 @@
             <th>Surface</th>
             <th>PU</th>
             <th>Total HT</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -204,11 +205,27 @@
             <td>{{this.surfacers}}</td>
             <td>{{this.pus}}</td>
             <td>{{this.prixs}}</td>   
+            <td></td>
         </tr>
         {{/each}}
        
 
     </tbody>
+    </table>
+
+    <div class="card border-secondary mb-3 offset-md-9" style="max-width: 20rem;">
+
+  <div class="card-body">
+   
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item"><em><strong>Total HT:    {{total}} DZD</strong></em></li>
+    <li class="list-group-item"><em><strong>TVA 19%:    {{tva}} DZD</strong></em></li>
+    <li class="list-group-item"><em><strong>Total TTC:    {{ttc}} DZD</strong></em></li>
+   
+  </ul>
+  </div>
+</div>
+    
     </div>
     
 

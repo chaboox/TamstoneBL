@@ -181,8 +181,21 @@ function createBl(req, res){
     if (!err)
     goToBlWithAllData(bl, res);
       
+    else
+            console.log('Error during record insertion : ' + err);
+    });
+}
 
-            else
+function createBlwithClient(req, res, idClient){
+    var bl = new BL();
+    bl.name = "test";
+    bl.client = idClient
+    bl.save((err, doc) => {
+
+    if (!err)
+    goToBlWithAllData(bl, res);
+      
+    else
             console.log('Error during record insertion : ' + err);
     });
 }
@@ -390,6 +403,9 @@ function handleValidationError(err, body) {
 }
 
 function numberWithCommas(x) {
+    if(x == undefined) return '0.00';
+    else if (x.length == 0) return '0.00';
+    else if (x == 0) return '0.00';
     var left = '';
     var right = '';
     var leftBool = true;
@@ -401,6 +417,7 @@ function numberWithCommas(x) {
         if(leftBool)
             left = left + x[i];
             else
+            if(right.length < 2)
             right = right + x[i];
     }
 
@@ -426,6 +443,9 @@ function goToBlWithAllData(bl, res){
                                 if (!err) {
                                     //console.log('JOJO' + docs4);
                                     var prestations = getPrestation(bl.products);
+                                    var total = getTotal(bl.products, prestations);
+                                    var tva = total* 0.19;
+                                    var ttc = total*1.19;
                                     res.render("employee/Bl", {
                                         viewTitle: "Insert Employee",
                                         quality: docs,
@@ -434,7 +454,10 @@ function goToBlWithAllData(bl, res){
                                         bl:bl,
                                         finitionc: docs4,
                                         presbool:false,
-                                        prestation: prestations
+                                        prestation: prestations,
+                                        total : numberWithCommas(total + ''),
+                                        tva: numberWithCommas(tva + ''),
+                                        ttc: numberWithCommas(ttc + '')
                                     });
                                 }
                                 else {
@@ -469,6 +492,9 @@ function goToBlWithAllDataAndId(bl, res, id){
                                 if (!err) {
                                     //console.log('JOJO' + docs4);
                                     var prestations = getPrestation(bl.products);
+                                    var total = getTotal(bl.products, prestations);
+                                    var tva = total* 0.19;
+                                    var ttc = total*1.19;
                                     res.render("employee/Bl", {
                                         viewTitle: "Insert Employee",
                                         quality: docs,
@@ -478,7 +504,10 @@ function goToBlWithAllDataAndId(bl, res, id){
                                         finitionc: docs4,
                                         idpr: id,
                                         presbool:true,
-                                        prestation: prestations
+                                        prestation: prestations,
+                                        total : numberWithCommas(total + ''),
+                                        tva: numberWithCommas(tva + ''),
+                                        ttc: numberWithCommas(ttc + '')
                                     });
                                 }
                                 else {
@@ -500,6 +529,19 @@ function goToBlWithAllDataAndId(bl, res, id){
             console.log('Error in retrieving employee list :' + err);
         }
     });
+}
+
+function getTotal(products, prestations){
+    var total = 0.0;
+    for(var i = 0; i < products.length; i++){
+        total = products[i].prix*1 + total;
+    }
+    for(var j = 0; j < prestations.length; j++){
+        
+        total = prestations[j].prix*1 + total;
+    }
+
+    return total;
 }
 
 function getPrestation(products){
@@ -579,6 +621,15 @@ router.get('/delete/:id', (req, res) => {
     });
 });
 
+router.get('/gotoblwithclient/:id', (req, res) => {
+    var idClient = req.params.id;
+    Client.findById(idClient, (err, doc) => {
+        if (!err) {
+           createBlwithClient(req, res, idClient)
+        }
+        else { console.log('Error in employee delete :' + err); }
+    });
+});
 
 router.get('/deletepro/:id', (req, res) => {
     var newArray = [];
