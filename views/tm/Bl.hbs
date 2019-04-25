@@ -1,27 +1,27 @@
- <h3>{{bl.client}}</h3>
+ <h3>{{bl.clientname}}</h3>
 
-<form action="/employee" method="POST" autocomplete="off">
+<form action="/tm" method="POST" autocomplete="off">
     <input type="hidden" name="product" value="{{bl._id}}">
     <!--<div class="form-group">
         <label>Full Name</label>
-        <input type="text" class="form-control" name="fullName" placeholder="Full Name" value="{{employee.fullName}}">
+        <input type="text" class="form-control" name="fullName" placeholder="Full Name" value="{{tm.fullName}}">
         <div class="text-danger">
-            {{employee.fullNameError}}</div>
+            {{tm.fullNameError}}</div>
     </div>
     <div class="form-group">
         <label>Email</label>
-        <input type="text" class="form-control" name="email" placeholder="Email" value="{{employee.email}}">
+        <input type="text" class="form-control" name="email" placeholder="Email" value="{{tm.email}}">
         <div class="text-danger">
-            {{employee.emailError}}</div>
+            {{tm.emailError}}</div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label>Mobile</label>
-            <input type="text" class="form-control" name="mobile" placeholder="Mobile" value="{{employee.mobile}}">
+            <input type="text" class="form-control" name="mobile" placeholder="Mobile" value="{{tm.mobile}}">
         </div>
         <div class="form-group col-md-6">
             <label>City</label>
-            <input type="text" class="form-control" name="city" placeholder="City" value="{{employee.city}}">
+            <input type="text" class="form-control" name="city" placeholder="City" value="{{tm.city}}">
         </div>-->
        <div class="form-row">
              <div class="form-group">
@@ -46,20 +46,22 @@
              </div>
                             <div class="col-md-1">
                                 
-                            <input type="text" class="form-control" name="qte" placeholder="Quantité">
-             </div>
-             <div class="col-md-1">
-                                
-                            <input type="text" class="form-control" name="larg" placeholder="Larg">
-             </div>
-               <div class="col-md-1">
-                                
-                            <input type="text" class="form-control" name="long" placeholder="Long">
+                            <input  class="form-control" name="qte" placeholder="Quantité" type="number" required min="1"> 
              </div>
 
               <div class="col-md-1">
                                 
-                            <input type="text" class="form-control" name="epai" placeholder="Epai">
+                            <input class="form-control" name="long" placeholder="Long" type="number" step="0.001" required min = "0">
+             </div>
+             <div class="col-md-1">
+                                
+                            <input type="number" step="0.001" required min = "0" class="form-control" name="larg" placeholder="Larg">
+             </div>
+              
+
+              <div class="col-md-1">
+                                
+                            <input type="number" step="0.001" required min = "0" class="form-control" name="epai" placeholder="Epai">
              </div>
 
             <div class="form-group">
@@ -74,13 +76,13 @@
           </div>
           <div class="col-md-1">
                                 
-                            <input type="text" class="form-control" name="pu" placeholder="Prix unitaire">
+                            <input class="form-control" name="pu" placeholder="Prix unitaire" type="number" step="0.001" required min = "0">
              </div>
               <div class="form-group">
          <button type="submit" class="btn btn-info"> Ajouter</button>
          	  </div> 
             </form>        
-            <form action="/employee/yo" method="POST" autocomplete="off">
+            <form action="/tm/yo" method="POST" autocomplete="off">
                <input type="hidden" name="idpr" value="{{idpr}}">
                <input type="hidden" name="idbl" value="{{bl._id}}">
 					
@@ -107,7 +109,7 @@
                             </div>
                          <div class="col-md-3">
                                 
-                            <input  type="text"  class="form-control " name="pup" placeholder="Prix unitaire">
+                            <input  type="number" step="0.001" required min = "0"  class="form-control " name="pup" placeholder="Prix unitaire">
              </div>
              <div class="form-group">
 
@@ -145,7 +147,7 @@
     
    <!-- <div class="form-group">
         <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
-        <a class="btn btn-secondary" href="/employee/list"><i class="fa fa-list-alt"></i> View All</a>
+        <a class="btn btn-secondary" href="/tm/list"><i class="fa fa-list-alt"></i> View All</a>
     </div>  -->
     <table class="table table-striped">
     <thead>
@@ -175,8 +177,8 @@
             <td>{{this.pus}}</td>
             <td>{{this.prixs}}</td>
             <td>
-                <a href="/employee/addprestation/{{this.idbl}}+{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
-                <a href="/employee/deletepro/{{this.idbl}}+{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+                <a href="/tm/addprestation/{{this.idbl}}+{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                <a href="/tm/deletepro/{{this.idbl}}+{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
             </td>
         </tr>
         {{/each}}
@@ -221,7 +223,7 @@
     <li class="list-group-item"><em><strong>Total HT:    {{total}} DZD</strong></em></li>
     <li class="list-group-item"><em><strong>TVA 19%:    {{tva}} DZD</strong></em></li>
     <li class="list-group-item"><em><strong>Total TTC:    {{ttc}} DZD</strong></em></li>
-   
+    
   </ul>
   </div>
 </div>

@@ -1,7 +1,7 @@
 const express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
-const Employee = mongoose.model('Employee');
+const tm = mongoose.model('Employee');
 const Quality = mongoose.model('Qualitie');
 const Finition = mongoose.model('Finition');
 const Finitionc = mongoose.model('Finitionc');
@@ -11,19 +11,8 @@ const Client = mongoose.model('Client');
 
 router.get('/', (req, res) => {
 
-    
-    Quality.find((err, docs) => {
-        if (!err) {
-            res.render("employee/addOrEdit", {
-                viewTitle: "Insert Employee",
-                quality: docs
-            });
-        }
-        else {
-            console.log('Error in retrieving employee list :' + err);
-        }
+    res.render("tm/home", {
     });
-
 
   
 });
@@ -33,7 +22,7 @@ router.get('/addClient', (req, res) => {
 
     
 
-            res.render("employee/addOrEditClient", {
+            res.render("tm/addOrEditClient", {
                 viewTitle: "Ajout client"
        
 });});
@@ -74,13 +63,13 @@ router.post('/filter', (req, res) => {
     var search = req.body.search;
     Client.find( { "name": { "$regex": search, "$options": "i" } },(err, docs) => {
         if (!err) {
-            res.render("employee/selectClient", {
+            res.render("tm/selectClient", {
                 list: docs,
                 search: search
             });
         }
         else {
-            console.log('Error in retrieving employee list :' + err);
+            console.log('Error in retrieving tm list :' + err);
         }
     });
 });
@@ -92,49 +81,49 @@ router.get('/BL', (req, res) => {
                 if (!err) {
                     Type.find((err, docs3) => {
                         if (!err) {
-                            res.render("employee/Bl", {
-                                viewTitle: "Insert Employee",
+                            res.render("tm/Bl", {
+                                viewTitle: "Insert tm",
                                 quality: docs,
                                 finition : docs2,
                                 type : docs3
                             });
                         }
                         else {
-                            console.log('Error in retrieving employee list :' + err);
+                            console.log('Error in retrieving tm list :' + err);
                         }
                     });
                 }
                 else {
-                    console.log('Error in retrieving employee list :' + err);
+                    console.log('Error in retrieving tm list :' + err);
                 }
             });
         }
         else {
-            console.log('Error in retrieving employee list :' + err);
+            console.log('Error in retrieving tm list :' + err);
         }
     });
 });
 
 router.get('/home', (req, res) => {
-            res.render("employee/home", {
+            res.render("tm/home", {
             });
 });
 
 function insertRecord(req, res) {
-    var employee = new Employee();
-    employee.fullName = req.body.fullName;
-    employee.email = req.body.email;
-    employee.mobile = req.body.mobile;
-    employee.city = [{name:req.body.city, code:"dd"},{name:req.body.city, code:"aa"}] ;
-    employee.save((err, doc) => {
+    var tm = new tm();
+    tm.fullName = req.body.fullName;
+    tm.email = req.body.email;
+    tm.mobile = req.body.mobile;
+    tm.city = [{name:req.body.city, code:"dd"},{name:req.body.city, code:"aa"}] ;
+    tm.save((err, doc) => {
         if (!err)
-            res.redirect('employee/list');
+            res.redirect('tm/list');
         else {
             if (err.name == 'ValidationError') {
                 handleValidationError(err, req.body);
-                res.render("employee/addOrEdit", {
-                    viewTitle: "Insert Employee",
-                    employee: req.body
+                res.render("tm/addOrEdit", {
+                    viewTitle: "Insert tm",
+                    tm: req.body
                 });
             }
             else
@@ -158,11 +147,11 @@ function insertClient(req, res) {
     client.number = req.body.number;
     client.save((err, doc) => {
         if (!err)
-            res.redirect('/employee/clients');
+            res.redirect('/tm/home');
         else {
             if (err.name == 'ValidationError') {
                 handleValidationError(err, req.body);
-                res.render("/employee/addOrEditClient", {
+                res.render("/tm/addOrEditClient", {
                     viewTitle: "Insert Client",
                     client: req.body
                 });
@@ -186,10 +175,11 @@ function createBl(req, res){
     });
 }
 
-function createBlwithClient(req, res, idClient){
+function createBlwithClient(req, res, idClient, clientname){
     var bl = new BL();
     bl.name = "test";
-    bl.client = idClient
+    bl.client = idClient;
+    bl.clientname = clientname;
     bl.save((err, doc) => {
 
     if (!err)
@@ -201,14 +191,14 @@ function createBlwithClient(req, res, idClient){
 }
 
 function updateRecord(req, res) {
-    Employee.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true }, (err, doc) => {
-        if (!err) { res.redirect('employee/list'); }
+    tm.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true }, (err, doc) => {
+        if (!err) { res.redirect('tm/list'); }
         else {
             if (err.name == 'ValidationError') {
                 handleValidationError(err, req.body);
-                res.render("employee/addOrEdit", {
-                    viewTitle: 'Update Employee',
-                    employee: req.body
+                res.render("tm/addOrEdit", {
+                    viewTitle: 'Update tm',
+                    tm: req.body
                 });
             }
             else
@@ -219,11 +209,11 @@ function updateRecord(req, res) {
 
 function updateClient(req, res) {
     Client.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true }, (err, doc) => {
-        if (!err) { res.redirect('/employee/clients'); }
+        if (!err) { res.redirect('/tm/clients'); }
         else {
             if (err.name == 'ValidationError') {
                 handleValidationError(err, req.body);
-                res.render("/employee/addOrEditClient", {
+                res.render("/tm/addOrEditClient", {
                     viewTitle: 'Update Client',
                     client: req.body
                 });
@@ -346,14 +336,14 @@ function calculeSurcace(product, sl, pu){
 
 router.get('/list', (req, res) => {
     console.log('JUST WATCH ME');
-    Employee.find((err, docs) => {
+    tm.find((err, docs) => {
         if (!err) {
-            res.render("employee/list", {
+            res.render("tm/list", {
                 list: docs
             });
         }
         else {
-            console.log('Error in retrieving employee list :' + err);
+            console.log('Error in retrieving tm list :' + err);
         }
     });
 });
@@ -362,12 +352,12 @@ router.get('/clients', (req, res) => {
     console.log('JUST WATCH ME');
     Client.find((err, docs) => {
         if (!err) {
-            res.render("employee/clients", {
+            res.render("tm/clients", {
                 list: docs
             });
         }
         else {
-            console.log('Error in retrieving employee list :' + err);
+            console.log('Error in retrieving tm list :' + err);
         }
     });
 });
@@ -377,12 +367,12 @@ router.get('/selectClient', (req, res) => {
     console.log('JUST WATCH ME');
     Client.find((err, docs) => {
         if (!err) {
-            res.render("employee/selectClient", {
+            res.render("tm/selectClient", {
                 list: docs
             });
         }
         else {
-            console.log('Error in retrieving employee list :' + err);
+            console.log('Error in retrieving tm list :' + err);
         }
     });
 });
@@ -446,8 +436,8 @@ function goToBlWithAllData(bl, res){
                                     var total = getTotal(bl.products, prestations);
                                     var tva = total* 0.19;
                                     var ttc = total*1.19;
-                                    res.render("employee/Bl", {
-                                        viewTitle: "Insert Employee",
+                                    res.render("tm/Bl", {
+                                        viewTitle: "Insert tm",
                                         quality: docs,
                                         finition : docs2,
                                         type : docs3,
@@ -461,22 +451,22 @@ function goToBlWithAllData(bl, res){
                                     });
                                 }
                                 else {
-                                    console.log('Error in retrieving employee list :' + err);
+                                    console.log('Error in retrieving tm list :' + err);
                                 }
                             });
                         }
                         else {
-                            console.log('Error in retrieving employee list :' + err);
+                            console.log('Error in retrieving tm list :' + err);
                         }
                     });
                 }
                 else {
-                    console.log('Error in retrieving employee list :' + err);
+                    console.log('Error in retrieving tm list :' + err);
                 }
             });
         }
         else {
-            console.log('Error in retrieving employee list :' + err);
+            console.log('Error in retrieving tm list :' + err);
         }
     });
 }
@@ -495,8 +485,8 @@ function goToBlWithAllDataAndId(bl, res, id){
                                     var total = getTotal(bl.products, prestations);
                                     var tva = total* 0.19;
                                     var ttc = total*1.19;
-                                    res.render("employee/Bl", {
-                                        viewTitle: "Insert Employee",
+                                    res.render("tm/Bl", {
+                                        viewTitle: "Insert tm",
                                         quality: docs,
                                         finition : docs2,
                                         type : docs3,
@@ -511,22 +501,22 @@ function goToBlWithAllDataAndId(bl, res, id){
                                     });
                                 }
                                 else {
-                                    console.log('Error in retrieving employee list :' + err);
+                                    console.log('Error in retrieving tm list :' + err);
                                 }
                             });
                         }
                         else {
-                            console.log('Error in retrieving employee list :' + err);
+                            console.log('Error in retrieving tm list :' + err);
                         }
                     });
                 }
                 else {
-                    console.log('Error in retrieving employee list :' + err);
+                    console.log('Error in retrieving tm list :' + err);
                 }
             });
         }
         else {
-            console.log('Error in retrieving employee list :' + err);
+            console.log('Error in retrieving tm list :' + err);
         }
     });
 }
@@ -582,11 +572,11 @@ function getPrestation(products){
 }
 
 router.get('/:id', (req, res) => {
-    Employee.findById(req.params.id, (err, doc) => {
+    tm.findById(req.params.id, (err, doc) => {
         if (!err) { 
-            res.render("employee/addOrEdit", {
-                viewTitle: "Update Employee",
-                employee: doc
+            res.render("tm/addOrEdit", {
+                viewTitle: "Update tm",
+                tm: doc
             });
         }
     });
@@ -595,7 +585,7 @@ router.get('/:id', (req, res) => {
 router.get('/modify/:id', (req, res) => {
     Client.findById(req.params.id, (err, doc) => {
         if (!err) { 
-            res.render("employee/addOrEditClient", {
+            res.render("tm/addOrEditClient", {
                 viewTitle: "Update client",
                 client: doc
             });
@@ -606,18 +596,18 @@ router.get('/modify/:id', (req, res) => {
 router.get('/deleteclient/:id', (req, res) => {
     Client.findByIdAndRemove(req.params.id, (err, doc) => {
         if (!err) {
-            res.redirect('/employee/clients');
+            res.redirect('/tm/clients');
         }
-        else { console.log('Error in employee delete :' + err); }
+        else { console.log('Error in tm delete :' + err); }
     });
 });
 
 router.get('/delete/:id', (req, res) => {
-    Employee.findByIdAndRemove(req.params.id, (err, doc) => {
+    tm.findByIdAndRemove(req.params.id, (err, doc) => {
         if (!err) {
-            res.redirect('/employee/list');
+            res.redirect('/tm/list');
         }
-        else { console.log('Error in employee delete :' + err); }
+        else { console.log('Error in tm delete :' + err); }
     });
 });
 
@@ -625,9 +615,9 @@ router.get('/gotoblwithclient/:id', (req, res) => {
     var idClient = req.params.id;
     Client.findById(idClient, (err, doc) => {
         if (!err) {
-           createBlwithClient(req, res, idClient)
+           createBlwithClient(req, res, idClient, doc.name);
         }
-        else { console.log('Error in employee delete :' + err); }
+        else { console.log('Error in tm delete :' + err); }
     });
 });
 
@@ -637,7 +627,7 @@ router.get('/deletepro/:id', (req, res) => {
     var idPR = req.params.id.substring(25);
     BL.findById(idBL, (err, doc) => {
         if (!err) { 
-           // res.redirect('/employee/list');
+           // res.redirect('/tm/list');
            for (var i = 0; i < doc.products.length; i++)
     if ( doc.products[i]._id == idPR) { 
         doc.products.splice(i, 1);
@@ -651,7 +641,7 @@ router.get('/deletepro/:id', (req, res) => {
                 console.log('Error during record insertion : ' + err);
         });
         }
-        else { console.log('Error in employee delete :' + err); }
+        else { console.log('Error in tm delete :' + err); }
     });
 });
 
@@ -661,10 +651,10 @@ router.get('/addprestation/:id', (req, res) => {
     console.log('TEST ALPHA :' + req.params.id + ' kk ' + idPR);
     BL.findById(idBL, (err, doc) => {
         if (!err) {
-            //res.redirect('/employee/list');
+            //res.redirect('/tm/list');
             goToBlWithAllDataAndId(doc, res, idPR);
         }
-        else { console.log('Error in employee delete :' + err); }
+        else { console.log('Error in tm delete :' + err); }
     });
 });
 module.exports = router;

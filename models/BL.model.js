@@ -48,6 +48,9 @@ var BLSchema = new mongoose.Schema({
     },
     client: {
         type: String
+    },
+    clientname: {
+        type: String
     }
 });
 

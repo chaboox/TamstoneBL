@@ -1,4 +1,4 @@
-<h3><a class="btn btn-secondary" href="/employee/addClient"><i class="fa fa-plus"></i>Ajouter un Client</a> Listes de clients</h3>
+<h3><a class="btn btn-secondary" href="/tm/addClient"><i class="fa fa-plus"></i>Ajouter un Client</a> Listes de clients</h3>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -31,8 +31,8 @@
             <td>{{this.number}}</td>
 
             <td>
-                <a href="/employee/modify/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
-                <a href="/employee/deleteclient/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+                <a href="/tm/modify/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                <a href="/tm/deleteclient/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
             </td>
         </tr>
         {{/each}}

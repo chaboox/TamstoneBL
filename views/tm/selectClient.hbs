@@ -1,6 +1,6 @@
-<h3><a class="btn btn-secondary" href="/employee/addClient"><i class="fa fa-plus"></i>Ajouter un Client</a> Listes de
-    clients</h3>
-<form action="/employee/filter" method="POST" autocomplete="off">
+<h3><a class="btn btn-secondary" href="/tm/addClient"><i class="fa fa-plus"></i>Ajouter un Client</a> Sélectionner le
+    client</h3>
+<form action="/tm/filter" method="POST" autocomplete="off">
     <div class="form-row">
         <div class="form-group col-md-8">
             <input type="text" class="form-control" name="search" placeholder="search" value="{{search}}"></div>
@@ -42,7 +42,7 @@
 
 
             <td>
-                <a class="btn btn-secondary" href="/employee/gotoblwithclient/{{this._id}}"></i>sélectionner</a>
+                <a class="btn btn-secondary" href="/tm/gotoblwithclient/{{this._id}}"></i>sélectionner</a>
             </td>
         </tr>
         {{/each}}
