@@ -8,9 +8,11 @@ const Finitionc = mongoose.model('Finitionc');
 const Type = mongoose.model('Type');
 const BL = mongoose.model('Bl');
 const Client = mongoose.model('Client');
+const Lastid = mongoose.model('Lastid');
+var request = require('request');
 
 router.get('/', (req, res) => {
-
+    //postFunc(8848)
     res.render("tm/home", {
     });
 
@@ -52,6 +54,26 @@ router.post('/modifyc', (req, res) => {
         insertClient(req, res);
         else
         updateClient(req, res);
+});
+
+router.post('/pdf', (req, res) => {
+   // console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
+ 
+    var idbl = req.body.bl;
+    BL.findById(idbl, (err, doc) => {
+        if (!err) {
+            //res.redirect('/tm/list');
+          //  postFunc(doc);
+            Client.findById(doc.client, (err, doc2) => {
+                if (!err) {
+                    //res.redirect('/tm/list');
+                    postFunc(doc, doc2, res);
+                }
+                else { console.log('Error in tm delete :' + err); }
+            });
+        }
+        else { console.log('Error in tm delete :' + err); }
+    });
 });
 
 router.post('/yo', (req, res) => {
@@ -533,6 +555,43 @@ function getTotal(products, prestations){
 
     return total;
 }
+
+function postFunc(bl, client, res){
+    Lastid.findById('5cc5a73ef761910bb44373fb', (err, doc) => {
+        if (!err) { 
+            console.log('BLOLO' + doc);
+            var lastid = doc.id;
+            doc.id =lastid*1 + 1;
+            doc.save((err, doc) => {
+
+                if (!err){
+                    var prestations = getPrestation(bl.products)
+                    var total = getTotal(bl.products, prestations);
+                                                    var tva = total* 0.19;
+                                                    var ttc = total*1.19;
+                                                    var ladate=new Date();
+                    var json = {"bl": bl, "client": client, "prestation": prestations, "total": numberWithCommas(total + ''), 
+                    "tva": numberWithCommas(tva + ''), "ttc": numberWithCommas(ttc + ''), "id":lastid, 
+                    "date": ladate.getDate()+"/"+(ladate.getMonth()+1)+"/"+ladate.getFullYear()}
+                    var myJSON = JSON.stringify(json);
+                    console.log('BLOLO' + bl);
+                    request.post({url:'http://10.1.12.55:8080/PDFWriterBL/PDF/Generate', 
+                    form: myJSON
+                    }, 
+                    function(err,httpResponse,body){ 
+                        console.log(err, httpResponse, body);
+                     });
+                     goToBlWithAllData(bl, res);  
+                }
+                  
+                        else
+                        console.log('Error during record insertion : ' + err);
+                });
+        }
+    });
+   
+
+  }
 
 function getPrestation(products){
     var result = [];

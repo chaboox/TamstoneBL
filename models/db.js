@@ -13,3 +13,5 @@ require('./finitionc.model');
 require('./type.model');
 require('./Bl.model');
 require('./client.model');
+require('./lastid.model');
+
