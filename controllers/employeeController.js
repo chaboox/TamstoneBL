@@ -10,9 +10,11 @@ const BL = mongoose.model('Bl');
 const Client = mongoose.model('Client');
 const Lastid = mongoose.model('Lastid');
 var request = require('request');
+var open = require('open');
 
 router.get('/', (req, res) => {
     //postFunc(8848)
+    console.log('Yayo !: ' + twodigit(9 + ''));
     res.render("tm/home", {
     });
 
@@ -186,7 +188,8 @@ function insertClient(req, res) {
 
 function createBl(req, res){
     var bl = new BL();
-    bl.name = "test";
+    bl.name = '-1';
+    bl.idbl = '-1';
     bl.save((err, doc) => {
 
     if (!err)
@@ -199,7 +202,8 @@ function createBl(req, res){
 
 function createBlwithClient(req, res, idClient, clientname){
     var bl = new BL();
-    bl.name = "test";
+    bl.name = '-1';
+    bl.idbl = '-1';     
     bl.client = idClient;
     bl.clientname = clientname;
     bl.save((err, doc) => {
@@ -557,41 +561,77 @@ function getTotal(products, prestations){
 }
 
 function postFunc(bl, client, res){
-    Lastid.findById('5cc5a73ef761910bb44373fb', (err, doc) => {
+    //TODO Change this in different db
+    //getPDF(res);
+   Lastid.findById('5cc5a73ef761910bb44373fb', (err, doc) => {
         if (!err) { 
             console.log('BLOLO' + doc);
-            var lastid = doc.id;
-            doc.id =lastid*1 + 1;
-            doc.save((err, doc) => {
+            var lastid ;
+            if(bl.name == '-1')
+            {lastid  = doc.id + '';
+            doc.id =lastid*1 + 1;}
+            else lastid = bl.name+'';
+            doc.save((err2, doc) => {
+                bl.name = lastid + '';
+                bl.save((err, doc) => {
 
-                if (!err){
-                    var prestations = getPrestation(bl.products)
-                    var total = getTotal(bl.products, prestations);
-                                                    var tva = total* 0.19;
-                                                    var ttc = total*1.19;
-                                                    var ladate=new Date();
-                    var json = {"bl": bl, "client": client, "prestation": prestations, "total": numberWithCommas(total + ''), 
-                    "tva": numberWithCommas(tva + ''), "ttc": numberWithCommas(ttc + ''), "id":lastid, 
-                    "date": ladate.getDate()+"/"+(ladate.getMonth()+1)+"/"+ladate.getFullYear()}
-                    var myJSON = JSON.stringify(json);
-                    console.log('BLOLO' + bl);
-                    request.post({url:'http://10.1.12.55:8080/PDFWriterBL/PDF/Generate', 
-                    form: myJSON
-                    }, 
-                    function(err,httpResponse,body){ 
-                        console.log(err, httpResponse, body);
-                     });
-                     goToBlWithAllData(bl, res);  
-                }
-                  
-                        else
-                        console.log('Error during record insertion : ' + err);
+                    if (!err)
+                    if (!err2){
+                        var prestations = getPrestation(bl.products)
+                        var total = getTotal(bl.products, prestations);
+                                                        var tva = total* 0.19;
+                                                        var ttc = total*1.19;
+                                                        var ladate=new Date();
+                        var json = {"bl": bl, "client": client, "prestation": prestations, "total": numberWithCommas(total + ''), 
+                        "tva": numberWithCommas(tva + ''), "ttc": numberWithCommas(ttc + ''), "id":lastid, 
+                        "date": twodigit(ladate.getDate() + '')+"/"+twodigit((ladate.getMonth()+1))+"/"+ladate.getFullYear()}
+                        var myJSON = JSON.stringify(json);
+                        console.log('BLOLO' + bl);
+                        request.post({url:'http://10.1.12.55:8080/PDFWriterBL/PDF/Generate', 
+                        form: myJSON
+                        }, 
+                        function(err,httpResponse,body){ 
+                            console.log(err, httpResponse + ' ----------------------- \n ----------------------------- \n--------------- ' + body);
+                            getPDF(res, body);
+                         });
+                         goToBlWithAllData(bl, res);  
+                    }
+                      
+                            else
+                            console.log('Error during record insertion : ' + err);
+                      
+                    else
+                            console.log('Error during record insertion : ' + err);
+                    });
+               
                 });
         }
     });
    
 
   }
+
+function getPDF(res, body){
+    /* request.post({url:'http://10.1.12.55:8080/PDFWriterBL/PDF/Download', 
+                    form: 'dd'
+                    }, 
+                    function(err,httpResponse,body){ 
+                        console.log(err, httpResponse, body);
+                     });*/
+                   //  res.redirect('http://10.1.12.55:8080/PDFWriterBL/PDF/Download?path=' + body)
+                  // window.open("https://www.w3schools.com");
+                   open( 'http://10.1.12.55:8080/PDFWriterBL/PDF/Download?path=' + body, function (err) {
+  if ( err ) throw err;    
+});
+}
+
+function twodigit(number){
+    console.log('ADEL' + number + 'OLO' + number.length);
+    if(number.length == 1 || number.length == undefined)
+    return '0' + number;
+    else return number;
+}
+
 
 function getPrestation(products){
     var result = [];

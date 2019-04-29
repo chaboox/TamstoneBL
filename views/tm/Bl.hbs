@@ -1,4 +1,12 @@
- <h3>{{bl.clientname}}</h3>
+ <!--<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  </nav>
+-->
+ 
+ <h5>{{bl.clientname}}</h5>
 
 <form action="/tm" method="POST" autocomplete="off">
     <input type="hidden" name="product" value="{{bl._id}}">
@@ -81,6 +89,7 @@
               <div class="form-group">
          <button type="submit" class="btn btn-info"> Ajouter</button>
          	  </div> 
+               </div>
             </form>        
             <form action="/tm/yo" method="POST" autocomplete="off">
                <input type="hidden" name="idpr" value="{{idpr}}">
@@ -149,9 +158,10 @@
         <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
         <a class="btn btn-secondary" href="/tm/list"><i class="fa fa-list-alt"></i> View All</a>
     </div>  -->
+    
     <table class="table table-striped">
     <thead>
-        <tr class="table-light">
+        <tr class="table-info">
             <th>Désignation</th>
             <th>Qte</th>
             <th>Long</th>
@@ -164,11 +174,11 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody>     
         {{#each bl.products}}
         <tr>
             <td>{{this.name}}   {{#each this.prestation}} {{this.name}} {{this.surface}} {{/each}}</td>
-            <td>{{this.quantity}}</td>
+            <td>{{this.quantity}}</td>          
             <td>{{this.longs}}</td>
             <td>{{this.largs}}</td>
             <td>{{this.epais}}</td>
