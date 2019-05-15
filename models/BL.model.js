@@ -58,6 +58,15 @@ var BLSchema = new mongoose.Schema({
     tva: {
         type: String
     },
+    chauffeur: {
+        type: String
+    },
+    matricule: {
+        type: String
+    },
+    volumes: {
+        type: String
+    },
     
 });
 

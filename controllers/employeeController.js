@@ -69,7 +69,7 @@ router.post('/projectselected', (req, res) => {
     var idClient = req.body.client;
     Client.findById(idClient, (err, doc) => {
         if (!err) {
-            createBlwithClientAndProject(req, res, req.body.client, doc.name, req.body.project, req.body.tva);
+            createBlwithClientAndProject(req, res, req.body.client, doc.name, req.body.project, req.body.tva, req.body.chauffeur, req.body.matricule, req.body.volumes);
             console.log('HEHE ' + req.body.client + doc.name +  req.body.project + req.body.tva);
         }
         else { console.log('Error in finding client :' + err); }
@@ -236,7 +236,7 @@ function createBlwithClient(req, res, idClient, clientname){
     });
 }
 
-function createBlwithClientAndProject(req, res, idClient, clientname, project, tva){
+function createBlwithClientAndProject(req, res, idClient, clientname, project, tva, chauffeur, matricule, volumes){
     var bl = new BL();
     bl.name = '-1';
     bl.idbl = '-1';     
@@ -244,6 +244,11 @@ function createBlwithClientAndProject(req, res, idClient, clientname, project, t
     bl.clientname = clientname;
     bl.project = project;
     bl.tva = tva;
+    if (tva == undefined)
+    bl.tva = "off"
+    bl.matricule = matricule;
+    bl.chauffeur = chauffeur;
+    bl.volumes = volumes;
     bl.save((err, doc) => {
 
     if (!err)
