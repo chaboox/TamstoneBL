@@ -27,7 +27,7 @@ var BLSchema = new mongoose.Schema({
             prestation:{
                 type:[{
                     name:String,
-                    surface:String,
+                    surface:String, 
                     pu:String,
                     prix:String,
                     surfacer:String,
@@ -51,7 +51,14 @@ var BLSchema = new mongoose.Schema({
     },
     clientname: {
         type: String
-    }
+    },
+    project: {
+        type: String
+    },
+    tva: {
+        type: String
+    },
+    
 });
 
 

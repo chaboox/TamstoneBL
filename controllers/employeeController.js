@@ -31,6 +31,12 @@ router.get('/addClient', (req, res) => {
        
 });});
 
+router.get('/project', (req, res) => {
+    
+    res.render("tm/project");
+
+});
+
 router.post('/', (req, res) => {
     console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
     if(req.body.product != '' && req.body.product != undefined)
@@ -57,6 +63,20 @@ router.post('/modifyc', (req, res) => {
         else
         updateClient(req, res);
 });
+
+router.post('/projectselected', (req, res) => {
+    // console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
+    var idClient = req.body.client;
+    Client.findById(idClient, (err, doc) => {
+        if (!err) {
+            createBlwithClientAndProject(req, res, req.body.client, doc.name, req.body.project, req.body.tva);
+            console.log('HEHE ' + req.body.client + doc.name +  req.body.project + req.body.tva);
+        }
+        else { console.log('Error in finding client :' + err); }
+    });
+
+   
+ });
 
 router.post('/pdf', (req, res) => {
    // console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
@@ -206,6 +226,24 @@ function createBlwithClient(req, res, idClient, clientname){
     bl.idbl = '-1';     
     bl.client = idClient;
     bl.clientname = clientname;
+    bl.save((err, doc) => {
+
+    if (!err)
+    goToBlWithAllData(bl, res);
+      
+    else
+            console.log('Error during record insertion : ' + err);
+    });
+}
+
+function createBlwithClientAndProject(req, res, idClient, clientname, project, tva){
+    var bl = new BL();
+    bl.name = '-1';
+    bl.idbl = '-1';     
+    bl.client = idClient;
+    bl.clientname = clientname;
+    bl.project = project;
+    bl.tva = tva;
     bl.save((err, doc) => {
 
     if (!err)
@@ -701,6 +739,8 @@ router.get('/deleteclient/:id', (req, res) => {
     });
 });
 
+
+
 router.get('/delete/:id', (req, res) => {
     tm.findByIdAndRemove(req.params.id, (err, doc) => {
         if (!err) {
@@ -717,6 +757,13 @@ router.get('/gotoblwithclient/:id', (req, res) => {
            createBlwithClient(req, res, idClient, doc.name);
         }
         else { console.log('Error in tm delete :' + err); }
+    });
+});
+
+router.get('/gotoprojectwithclient/:id', (req, res) => {
+    var idClient = req.params.id;
+    res.render("tm/project", {
+        client: idClient
     });
 });
 
