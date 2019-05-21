@@ -27,18 +27,14 @@ router.get('/addClient', (req, res) => {
 });});
 
 router.get('/project', (req, res) => {
-    
     res.render("tm/project");
-
 });
 
 router.post('/', (req, res) => {
-    console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
     if(req.body.product != '' && req.body.product != undefined)
         AddProduct(req, res);
     else
     if(req.body.bl_id != ''  && req.body.bl_id != undefined){
-        console.log('Yayo 2!: ');
         createBl(req, res);
     }
     else
@@ -49,10 +45,7 @@ router.post('/', (req, res) => {
         updateRecord(req, res);
 });
 
-router.post('/modifyc', (req, res) => {
-   // console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
- 
-    
+router.post('/modifyc', (req, res) => { 
     if (req.body._id == '')
         insertClient(req, res);
         else
@@ -61,46 +54,35 @@ router.post('/modifyc', (req, res) => {
 
 
 router.post('/projectselected', (req, res) => {
-    // console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
     var idClient = req.body.client;
     Client.findById(idClient, (err, doc) => {
         if (!err) {
             createBlwithClientAndProject(req, res, req.body.client, doc.name, req.body.project, req.body.tva, req.body.chauffeur, req.body.matricule, req.body.volumes);
-            console.log('HEHE ' + req.body.client + doc.name +  req.body.project + req.body.tva);
         }
         else { console.log('Error in finding client :' + err); }
     });
-
-   
  });
 
 router.post('/pdf', (req, res) => {
-   // console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
- 
     var idbl = req.body.bl;
     BL.findById(idbl, (err, doc) => {
         if (!err) {
-            //res.redirect('/tm/list');
-          //  postFunc(doc);
             Client.findById(doc.client, (err, doc2) => {
                 if (!err) {
-                    //res.redirect('/tm/list');
                     postFunc(doc, doc2, res);
                 }
-                else { console.log('Error in tm delete :' + err); }
+                else { console.log('Error in finding client :' + err); }
             });
         }
-        else { console.log('Error in tm delete :' + err); }
+        else { console.log('Error in finding bl :' + err); }
     });
 });
 
 router.post('/yo', (req, res) => {
-    console.log('YOJA!: ');
     AddPrestation(req, res);
 });
 
 router.post('/formcomment', (req, res) => {
-    console.log('YOJA!: ');
     AddComment(req, res);
 });
 
@@ -114,7 +96,7 @@ router.post('/filter', (req, res) => {
             });
         }
         else {
-            console.log('Error in retrieving tm list :' + err);
+            console.log('Error in retrieving client :' + err);
         }
     });
 });
@@ -134,17 +116,17 @@ router.get('/BL', (req, res) => {
                             });
                         }
                         else {
-                            console.log('Error in retrieving tm list :' + err);
+                            console.log('Error in retrieving type :' + err);
                         }
                     });
                 }
                 else {
-                    console.log('Error in retrieving tm list :' + err);
+                    console.log('Error in retrieving finitions :' + err);
                 }
             });
         }
         else {
-            console.log('Error in retrieving tm list :' + err);
+            console.log('Error in retrieving qualities :' + err);
         }
     });
 });
@@ -153,7 +135,7 @@ router.get('/home', (req, res) => {
             res.render("tm/home", {
             });
 });
-
+//testing function
 function insertRecord(req, res) {
     var tm = new tm();
     tm.fullName = req.body.fullName;
@@ -202,7 +184,7 @@ function insertClient(req, res) {
                 });
             }
             else
-                console.log('Error during record insertion : ' + err);
+                console.log('Error during client insertion : ' + err);
         }
     });
 }
@@ -217,7 +199,7 @@ function createBl(req, res){
     goToBlWithAllData(bl, res);
       
     else
-            console.log('Error during record insertion : ' + err);
+            console.log('Error during saving bl : ' + err);
     });
 }
 
@@ -233,7 +215,7 @@ function createBlwithClient(req, res, idClient, clientname){
     goToBlWithAllData(bl, res);
       
     else
-            console.log('Error during record insertion : ' + err);
+            console.log('Error during saving BL : ' + err);
     });
 }
 
@@ -256,7 +238,7 @@ function createBlwithClientAndProject(req, res, idClient, clientname, project, t
     goToBlWithAllData(bl, res);
       
     else
-            console.log('Error during record insertion : ' + err);
+            console.log('Error during saving BL : ' + err);
     });
 }
 
@@ -289,17 +271,13 @@ function updateClient(req, res) {
                 });
             }
             else
-                console.log('Error during record update : ' + err);
+                console.log('Error during finding client : ' + err);
         }
     });
 }
 
 function AddProduct(req, res){
-    console.log('Yaya !: ' + req.body.product);
     BL.findById(req.body.product, (err, doc) => {
-       console.log('Hey !: ' + req.body.finition);
-       //TODO Calcul price
-
        var surface = calculSurfaceByType(req.body.uv, 1000*req.body.qte, 1000*req.body.long, 1000*req.body.larg, 1000*req.body.epai)
        var epais = numberWithCommas(req.body.epai);
        var largs = numberWithCommas(req.body.larg);
@@ -307,17 +285,12 @@ function AddProduct(req, res){
        var pus = numberWithCommas(req.body.pu);
        var prixs = numberWithCommas((surface * req.body.pu) + '');
        var surfaces = numberWithCommas(surface + '');
-       console.log('Hey !: ' + surfaces + ' LOLO ' + surface);
-      // surface = Math.floor(( surface )*10000)/10000;
-       // doc.products = [{name:"req.body.city", code:"dd"},{name:"req.body.city", code:"aa"}] ;
        doc.products.push({name:req.body.quality + ' ' + req.body.finition + ' ' + req.body.type, quantity:req.body.qte, long : req.body.long,  longs : longs, larg : req.body.larg, largs : largs, epai : req.body.epai, epais : epais, uv: req.body.uv, idbl: doc._id, pu : req.body.pu, pus: pus, surface: surface, surfaces: surfaces, prixs: prixs, prix: surface * req.body.pu})
-       console.log('TABLE  : ' + doc.products);
        doc.save((err, doc2) => {
         if (!err)
-       goToBlWithAllData(doc, res);
-     
-            else
-                console.log('Error during record insertion : ' + err);
+            goToBlWithAllData(doc, res);
+        else
+            console.log('Error during record insertion : ' + err);
         });
 });
 
@@ -326,7 +299,6 @@ function AddProduct(req, res){
 }
 
 function calculSurfaceByType(type, qte, long, larg, epai){
-    console.log('XANLEA' + type);
     if(type == "M2") return (qte * long * larg)/1000000000;
     else if(type == "ML") return (qte * long)/1000000;
     else if(type == "U") return qte/1000;
@@ -336,30 +308,20 @@ function calculSurfaceByType(type, qte, long, larg, epai){
 }
 
 function AddPrestation(req, res){
-    console.log('XANA' + req.body.idpr + ' TT ' + req.body.idbl);
-
     BL.findById(req.body.idbl, (err, doc) => {
-        
-      // doc.products = [{name:"req.body.city", code:"dd"},{name:"req.body.city", code:"aa"}] ;
-      for (i = 0; i < doc.products.length; i++){
+    for (i = 0; i < doc.products.length; i++){
         console.log('XAN!' + doc.products[i] + ' pp ' +  req.body.idpr);  
-          if(req.body.idpr == doc.products[i]._id){
+        if(req.body.idpr == doc.products[i]._id){
             console.log('XANAWA');
             var surcafepr = calculeSurcace(doc.products[i], req.body.sl, req.body.pup);
             doc.products[i].prestation.push({name: req.body.finitionc, surface:req.body.sl, pu: req.body.pup, prix:surcafepr * req.body.pup, surfacer: surcafepr, surfacers: numberWithCommas(surcafepr + ''), prixs: numberWithCommas((surcafepr * req.body.pup) + ''), pus: numberWithCommas(req.body.pup)})
           }
       }
-     
-      console.log('XANA' + doc.products);
-       //doc.products.push({name:req.body.quality + ' ' + req.body.finition + ' ' + req.body.type, quantity:req.body.qte, long : req.body.long, larg : req.body.larg, epai : req.body.epai, uv: req.body.uv, idbl: doc._id})
-      // console.log('TABLE  : ' + doc.products);
-      doc.save((err, doc2) => {
-       if (!err)
-       goToBlWithAllData(doc, res);
-     //  goToBlWithAllData(doc, res);
-     
-            else
-               console.log('Error during record insertion : ' + err);
+    doc.save((err, doc2) => {
+    if (!err)
+        goToBlWithAllData(doc, res);
+    else
+        console.log('Error during saving BL : ' + err);
         });
 });
 
@@ -371,26 +333,16 @@ function AddComment(req, res){
 
     BL.findById(req.body.idbl, (err, doc) => {
         
-      // doc.products = [{name:"req.body.city", code:"dd"},{name:"req.body.city", code:"aa"}] ;
       for (i = 0; i < doc.products.length; i++){
-        console.log('XAN!' + doc.products[i] + ' pp ' +  req.body.idpr);  
-          if(req.body.idpr == doc.products[i]._id){
-            console.log('XANAWA');
-            
+          if(req.body.idpr == doc.products[i]._id){        
             doc.products[i].comment = "(" + req.body.cmt + ")";
           }
       }
-     
-      console.log('XANA' + doc.products);
-       //doc.products.push({name:req.body.quality + ' ' + req.body.finition + ' ' + req.body.type, quantity:req.body.qte, long : req.body.long, larg : req.body.larg, epai : req.body.epai, uv: req.body.uv, idbl: doc._id})
-      // console.log('TABLE  : ' + doc.products);
-      doc.save((err, doc2) => {
+       doc.save((err, doc2) => {
        if (!err)
-       goToBlWithAllData(doc, res);
-     //  goToBlWithAllData(doc, res);
-     
-            else
-               console.log('Error during record insertion : ' + err);
+          goToBlWithAllData(doc, res);
+       else
+               console.log('Error during saving BL : ' + err);
         });
 });
 
@@ -436,7 +388,6 @@ function calculeSurcace(product, sl, pu){
 }
 
 router.get('/list', (req, res) => {
-    console.log('JUST WATCH ME');
     tm.find((err, docs) => {
         if (!err) {
             res.render("tm/list", {
@@ -450,7 +401,6 @@ router.get('/list', (req, res) => {
 });
 
 router.get('/clients', (req, res) => {
-    console.log('JUST WATCH ME');
     Client.find((err, docs) => {
         if (!err) {
             res.render("tm/clients", {
@@ -458,14 +408,12 @@ router.get('/clients', (req, res) => {
             });
         }
         else {
-            console.log('Error in retrieving tm list :' + err);
+            console.log('Error in retrieving client list :' + err);
         }
     });
 });
 
 router.get('/selectClient', (req, res) => {
-  
-    console.log('JUST WATCH ME');
     Client.find((err, docs) => {
         if (!err) {
             res.render("tm/selectClient", {
@@ -473,7 +421,7 @@ router.get('/selectClient', (req, res) => {
             });
         }
         else {
-            console.log('Error in retrieving tm list :' + err);
+            console.log('Error in retrieving clients list :' + err);
         }
     });
 });
@@ -532,7 +480,6 @@ function goToBlWithAllData(bl, res){
                         if (!err) {
                             Finitionc.find((err, docs4) => {
                                 if (!err) {
-                                    //console.log('JOJO' + docs4);
                                     var prestations = getPrestation(bl.products);
                                     var total = getTotal(bl.products, prestations);
                                     var tva = total* 0.19;
@@ -553,22 +500,22 @@ function goToBlWithAllData(bl, res){
                                     });
                                 }
                                 else {
-                                    console.log('Error in retrieving tm list :' + err);
+                                    console.log('Error in retrieving finitions list :' + err);
                                 }
                             });
                         }
                         else {
-                            console.log('Error in retrieving tm list :' + err);
+                            console.log('Error in retrieving types list :' + err);
                         }
                     });
                 }
                 else {
-                    console.log('Error in retrieving tm list :' + err);
+                    console.log('Error in retrieving finitions list :' + err);
                 }
             });
         }
         else {
-            console.log('Error in retrieving tm list :' + err);
+            console.log('Error in retrieving qualities list :' + err);
         }
     });
 }
@@ -582,7 +529,6 @@ function goToBlWithAllDataAndId(bl, res, id){
                         if (!err) {
                             Finitionc.find((err, docs4) => {
                                 if (!err) {
-                                    //console.log('JOJO' + docs4);
                                     var prestations = getPrestation(bl.products);
                                     var total = getTotal(bl.products, prestations);
                                     var tva = total* 0.19;
@@ -604,22 +550,22 @@ function goToBlWithAllDataAndId(bl, res, id){
                                     });
                                 }
                                 else {
-                                    console.log('Error in retrieving tm list :' + err);
+                                    console.log('Error in retrieving finitions list :' + err);
                                 }
                             });
                         }
                         else {
-                            console.log('Error in retrieving tm list :' + err);
+                            console.log('Error in retrieving types list :' + err);
                         }
                     });
                 }
                 else {
-                    console.log('Error in retrieving tm list :' + err);
+                    console.log('Error in retrieving finitions list :' + err);
                 }
             });
         }
         else {
-            console.log('Error in retrieving tm list :' + err);
+            console.log('Error in retrieving qualities list :' + err);
         }
     });
 }
@@ -656,22 +602,22 @@ function goToBlWithAllDataAndIdWithComment(bl, res, id){
                                     });
                                 }
                                 else {
-                                    console.log('Error in retrieving tm list :' + err);
+                                    console.log('Error in retrieving finition list :' + err);
                                 }
                             });
                         }
                         else {
-                            console.log('Error in retrieving tm list :' + err);
+                            console.log('Error in retrieving type list :' + err);
                         }
                     });
                 }
                 else {
-                    console.log('Error in retrieving tm list :' + err);
+                    console.log('Error in retrieving finition list :' + err);
                 }
             });
         }
         else {
-            console.log('Error in retrieving tm list :' + err);
+            console.log('Error in retrieving qualities list :' + err);
         }
     });
 }
@@ -691,16 +637,15 @@ function getTotal(products, prestations){
 }
 
 function postFunc(bl, client, res){
-    //TODO Change this in different db
-    //getPDF(res);
+    //TODO change last id
    Lastid.findById('5cc5a73ef761910bb44373fb', (err, doc) => {
         if (!err) { 
-            console.log('BLOLO' + doc);
             var lastid ;
             if(bl.name == '-1')
-            {lastid  = doc.id + '';
-            doc.id =lastid*1 + 1;}
-            else lastid = bl.name+'';
+                {lastid  = doc.id + '';
+                doc.id =lastid*1 + 1;}
+            else
+                 lastid = bl.name+'';
             doc.save((err2, doc) => {
                 bl.name = lastid + '';
                 bl.save((err, doc) => {
@@ -772,7 +717,6 @@ function getPrestation(products){
                 if(result[k].name == products[i].prestation[j].name && result[k].pu == products[i].prestation[j].pu){
                     result[k].surfacer = result[k].surfacer*1 + products[i].prestation[j].surfacer*1;
                     result[k].surfacers = numberWithCommas(result[k].surfacer);
-                   // var opp = result[k].surfacer*1 + products[i].prestation[j].surfacer*1;
                     result[k].prix = result[k].surfacer * result[k].pu;
                     result[k].prixs = numberWithCommas(result[k].prix);
                     isInResult = true;
@@ -850,18 +794,17 @@ router.get('/deletepro/:id', (req, res) => {
     var idPR = req.params.id.substring(25);
     BL.findById(idBL, (err, doc) => {
         if (!err) { 
-           // res.redirect('/tm/list');
            for (var i = 0; i < doc.products.length; i++)
-    if ( doc.products[i]._id == idPR) { 
-        doc.products.splice(i, 1);
-        break;
+        if (doc.products[i]._id == idPR) { 
+          doc.products.splice(i, 1);
+          break;
     }
     doc.save((err, doc) => {
 
         if (!err)
-        goToBlWithAllData(doc, res);    
-                else
-                console.log('Error during record insertion : ' + err);
+           goToBlWithAllData(doc, res);    
+        else
+            console.log('Error during record insertion : ' + err);
         });
         }
         else { console.log('Error in tm delete :' + err); }
@@ -888,7 +831,6 @@ router.get('/addcomment/:id', (req, res) => {
     console.log('TEST ALPHA :' + req.params.id + ' kk ' + idPR);
     BL.findById(idBL, (err, doc) => {
         if (!err) {
-            //res.redirect('/tm/list');
             goToBlWithAllDataAndIdWithComment(doc, res, idPR);
         }
         else { console.log('Error in tm addprestation :' + err); }
