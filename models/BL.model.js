@@ -19,6 +19,7 @@ var BLSchema = new mongoose.Schema({
             larg:String,
             epai:String,
             quantity:String,
+            comment:String,
             uv:String,
             surface:String,
             pu:String,

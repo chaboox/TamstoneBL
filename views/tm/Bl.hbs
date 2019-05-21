@@ -152,7 +152,41 @@
                     {{/if}}
              </div>
                          
-                        </div></form>
+                        </div>
+            </form>    
+                   <form action="/tm/formComment" method="POST" autocomplete="off">
+               <input type="hidden" name="idpr" value="{{idpr}}">
+               <input type="hidden" name="idbl" value="{{bl._id}}">     
+
+  <div class="form-row ">
+     
+             
+                  {{#if cmtbool}}
+				         
+                            <input  type="text"   class="form-control form-group col-md-5 mr-1" name="cmt" placeholder="Comentaire" >
+             
+            
+
+                            <button type="submit" class="btn btn-info form-group"> Confirmer</button>  	
+
+                            {{else}}
+   <input  type="text"   class="form-control form-group col-md-5 mr-1 invisible" name="cmt" placeholder="Comentaire" >
+             
+            
+
+                            <button type="submit" class="btn btn-info form-group invisible"> Confirmer</button>  	
+                          		
+                         
+                       
+                     
+                    {{/if}}
+            
+             </div>
+                         
+                        
+                        
+
+                        </form>
     
    <!-- <div class="form-group">
         <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
@@ -177,7 +211,7 @@
     <tbody>     
         {{#each bl.products}}
         <tr>
-            <td>{{this.name}}   {{#each this.prestation}} {{this.name}} {{this.surface}} {{/each}}</td>
+            <td>{{this.name}} {{this.comment}}  {{#each this.prestation}} {{this.name}} {{this.surface}} {{/each}}</td>
             <td>{{this.quantity}}</td>          
             <td>{{this.longs}}</td>
             <td>{{this.largs}}</td>
@@ -188,6 +222,7 @@
             <td>{{this.prixs}}</td>
             <td>
                 <a href="/tm/addprestation/{{this.idbl}}+{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                <a href="/tm/addcomment/{{this.idbl}}+{{this._id}}"><i class="fa fa-comment fa-lg" aria-hidden="true"></i></a>
                 <a href="/tm/deletepro/{{this.idbl}}+{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
             </td>
         </tr>

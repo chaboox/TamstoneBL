@@ -64,6 +64,7 @@ router.post('/modifyc', (req, res) => {
         updateClient(req, res);
 });
 
+
 router.post('/projectselected', (req, res) => {
     // console.log('Yayo !: ' +req.body.product + ' kk ' + req.body.bl_id );
     var idClient = req.body.client;
@@ -101,6 +102,11 @@ router.post('/pdf', (req, res) => {
 router.post('/yo', (req, res) => {
     console.log('YOJA!: ');
     AddPrestation(req, res);
+});
+
+router.post('/formcomment', (req, res) => {
+    console.log('YOJA!: ');
+    AddComment(req, res);
 });
 
 router.post('/filter', (req, res) => {
@@ -364,6 +370,37 @@ function AddPrestation(req, res){
 
 }
 
+
+function AddComment(req, res){
+    console.log('XANA' + req.body.idpr + ' TT ' + req.body.idbl);
+
+    BL.findById(req.body.idbl, (err, doc) => {
+        
+      // doc.products = [{name:"req.body.city", code:"dd"},{name:"req.body.city", code:"aa"}] ;
+      for (i = 0; i < doc.products.length; i++){
+        console.log('XAN!' + doc.products[i] + ' pp ' +  req.body.idpr);  
+          if(req.body.idpr == doc.products[i]._id){
+            console.log('XANAWA');
+            
+            doc.products[i].comment = "(" + req.body.cmt + ")";
+          }
+      }
+     
+      console.log('XANA' + doc.products);
+       //doc.products.push({name:req.body.quality + ' ' + req.body.finition + ' ' + req.body.type, quantity:req.body.qte, long : req.body.long, larg : req.body.larg, epai : req.body.epai, uv: req.body.uv, idbl: doc._id})
+      // console.log('TABLE  : ' + doc.products);
+      doc.save((err, doc2) => {
+       if (!err)
+       goToBlWithAllData(doc, res);
+     //  goToBlWithAllData(doc, res);
+     
+            else
+               console.log('Error during record insertion : ' + err);
+        });
+});
+
+}
+
 function calculeSurcace(product, sl, pu){
     switch(sl) {
         case 'S/1 LONG':
@@ -513,6 +550,7 @@ function goToBlWithAllData(bl, res){
                                         bl:bl,
                                         finitionc: docs4,
                                         presbool:false,
+                                        cmtbool:false,
                                         prestation: prestations,
                                         total : numberWithCommas(total + ''),
                                         tva: numberWithCommas(tva + ''),
@@ -563,6 +601,7 @@ function goToBlWithAllDataAndId(bl, res, id){
                                         finitionc: docs4,
                                         idpr: id,
                                         presbool:true,
+                                        cmtbool:false,
                                         prestation: prestations,
                                         total : numberWithCommas(total + ''),
                                         tva: numberWithCommas(tva + ''),
@@ -589,6 +628,59 @@ function goToBlWithAllDataAndId(bl, res, id){
         }
     });
 }
+
+
+function goToBlWithAllDataAndIdWithComment(bl, res, id){
+    Quality.find((err, docs) => {
+        if (!err) {
+            Finition.find((err, docs2) => {
+                if (!err) {
+                    Type.find((err, docs3) => {
+                        if (!err) {
+                            Finitionc.find((err, docs4) => {
+                                if (!err) {
+                                    //console.log('JOJO' + docs4);
+                                    var prestations = getPrestation(bl.products);
+                                    var total = getTotal(bl.products, prestations);
+                                    var tva = total* 0.19;
+                                    var ttc = total*1.19;
+                                    res.render("tm/Bl", {
+                                        viewTitle: "Insert tm",
+                                        quality: docs,
+                                        finition : docs2,
+                                        type : docs3,
+                                        bl:bl,
+                                        finitionc: docs4,
+                                        idpr: id,
+                                        presbool:false,
+                                        cmtbool:true,
+                                        prestation: prestations,
+                                        total : numberWithCommas(total + ''),
+                                        tva: numberWithCommas(tva + ''),
+                                        ttc: numberWithCommas(ttc + '')
+                                    });
+                                }
+                                else {
+                                    console.log('Error in retrieving tm list :' + err);
+                                }
+                            });
+                        }
+                        else {
+                            console.log('Error in retrieving tm list :' + err);
+                        }
+                    });
+                }
+                else {
+                    console.log('Error in retrieving tm list :' + err);
+                }
+            });
+        }
+        else {
+            console.log('Error in retrieving tm list :' + err);
+        }
+    });
+}
+
 
 function getTotal(products, prestations){
     var total = 0.0;
@@ -805,7 +897,21 @@ router.get('/addprestation/:id', (req, res) => {
             //res.redirect('/tm/list');
             goToBlWithAllDataAndId(doc, res, idPR);
         }
-        else { console.log('Error in tm delete :' + err); }
+        else { console.log('Error in tm addprestation :' + err); }
+    });
+});
+
+
+router.get('/addcomment/:id', (req, res) => {
+    var idBL =  req.params.id.substring(0, 24);
+    var idPR = req.params.id.substring(25);
+    console.log('TEST ALPHA :' + req.params.id + ' kk ' + idPR);
+    BL.findById(idBL, (err, doc) => {
+        if (!err) {
+            //res.redirect('/tm/list');
+            goToBlWithAllDataAndIdWithComment(doc, res, idPR);
+        }
+        else { console.log('Error in tm addprestation :' + err); }
     });
 });
 module.exports = router;
