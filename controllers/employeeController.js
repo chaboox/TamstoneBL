@@ -13,8 +13,6 @@ var request = require('request');
 var open = require('open');
 
 router.get('/', (req, res) => {
-    //postFunc(8848)
-    console.log('Yayo !: ' + twodigit(9 + ''));
     res.render("tm/home", {
     });
 
@@ -23,10 +21,7 @@ router.get('/', (req, res) => {
 
 
 router.get('/addClient', (req, res) => {
-
-    
-
-            res.render("tm/addOrEditClient", {
+        res.render("tm/addOrEditClient", {
                 viewTitle: "Ajout client"
        
 });});
@@ -770,38 +765,23 @@ function twodigit(number){
 
 function getPrestation(products){
     var result = [];
-    console.log('OIOI' + products[0]);
-   // if(bl != undefined)
-   //if(bl.products != undefined)
    for (var i = 0; i < products.length; i++){
-        console.log('OIOI2' + products[i]);
         for (var j = 0; j < products[i].prestation.length; j++){
-            console.log('OIOI2' + products[i].prestation[j]);
             var isInResult = false;
             for (var k = 0; k < result.length; k++){
-                console.log('JOKO   ' + products[i].prestation[j].name + " ||| "  + result[k].name + " |||| " + result[k].pu + products[i].prestation[j].pu);
                 if(result[k].name == products[i].prestation[j].name && result[k].pu == products[i].prestation[j].pu){
-                    console.log('JOKO!!!!   ' +  result[k].surfacer + " LL " + result[k].pu + "LL " + result[k].prix + isInResult + " KLKLKL " + products[i].prestation[j].surfacer);
-                    console.log('LOLO' + result);
                     result[k].surfacer = result[k].surfacer*1 + products[i].prestation[j].surfacer*1;
                     result[k].surfacers = numberWithCommas(result[k].surfacer);
                    // var opp = result[k].surfacer*1 + products[i].prestation[j].surfacer*1;
                     result[k].prix = result[k].surfacer * result[k].pu;
                     result[k].prixs = numberWithCommas(result[k].prix);
-                   // result[k].surfacer = opp;
                     isInResult = true;
-                    //console.log('JOKO!!!!   ' +  result[k].surfacer + " LL " + result[k].pu + "LL " + result[k].prix + isInResult + "KLOLKLO " + opp);
                 }
             }
            if(isInResult == false) 
                 result.push(products[i].prestation[j]);
         }
-   }
-       // for(prestation in products){
-        // result.push(prestation);   
-        //}
-    
-    console.log('PRORO' + result);
+   }    
     return result;
 }
 
